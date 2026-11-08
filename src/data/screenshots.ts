@@ -48,8 +48,8 @@ export const SCREENSHOTS = {
     description:
       'The Stats tab summary cards, coverage counts, and the Top 10 ranking for a filtered sample.',
     alt: 'TokGrid analytics overview with sample medians, coverage, and a Top 10 ranking.',
-    width: 382,
-    height: 1090,
+    width: 376,
+    height: 1093,
   },
   scatter: {
     base: '/images/screenshots/scatter-plot',
