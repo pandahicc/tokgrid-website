@@ -5,6 +5,7 @@
 - 目标域名：`https://tokgrid.app/`（尚未部署）
 - 联系邮箱：`pandahi.cc@gmail.com`
 - GA4：`G-8SL1Y6HB4Q`（生产默认启用）
+- GitHub：`https://github.com/pandahicc/tokgrid-website`
 
 ---
 
@@ -152,34 +153,28 @@ GA4 启用后，第三方 `gtag.js` 会占用部分移动端性能预算，因�
 
 1. **真实产品截图**：12 个槽位目前均为占位，需要真实扩展截图。
 2. **Support URL / Privacy 法律主体信息**：邮箱已设置为 `pandahi.cc@gmail.com`；CWS Support URL 与必要的法律主体信息仍待补齐。
-3. **GitHub 远程仓库**：本地提交已完成；当前仓库没有 remote，也没有 `gh` 登录，实际 push 需要远程地址与凭据。
-4. **GA 同意/合规评估**：GA4 已默认启用并可能设置 `_ga` Cookie；当前没有 Cookie 同意横幅，面向 EEA/UK 等地区上线前需评估或禁用。
-5. **Cloudflare Pages / DNS 权限**：未执行部署，未修改 DNS。
-6. **Chrome Web Store Homepage/Support URL**：需上线后更新。
-7. **Search Console / Bing Webmaster Tools**：未提交。
-8. **Pro 价格展示**：已确认不在网站展示；网站只说明 Pro 为付费升级，具体方案在扩展内查看。
-9. **法律/隐私审阅**：Privacy 已按当前代码事实编写，但正式上线前建议进行法律审阅。
-10. **GitHub Actions 实际运行**：CI 文件已创建，但尚未在 GitHub 上触发。
+3. **GA 同意/合规评估**：GA4 已默认启用并可能设置 `_ga` Cookie；当前没有 Cookie 同意横幅，面向 EEA/UK 等地区上线前需评估或禁用。
+4. **Cloudflare Pages / DNS 权限**：未执行部署，未修改 DNS。
+5. **Chrome Web Store Homepage/Support URL**：需上线后更新。
+6. **Search Console / Bing Webmaster Tools**：未提交。
+7. **Pro 价格展示**：已确认不在网站展示；网站只说明 Pro 为付费升级，具体方案在扩展内查看。
+8. **法律/隐私审阅**：Privacy 已按当前代码事实编写，但正式上线前建议进行法律审阅。
+9. **GitHub Actions 运行结果**：CI 已随 push 触发；本环境 GitHub API 触发限流，未能查询结果，请在仓库 Actions 页面确认。
 
 ## F. 用户需要执行的操作
 
 1. 提供或放入 12 张真实插件截图到 `public/images/screenshots/`，文件名、所在页面和图片含义见 `docs/screenshot-guide.md`。
 2. 在 Chrome Web Store 后台配置 Support URL；如需变更邮箱，更新 `src/data/site.ts`。
-3. 提供 GitHub 仓库地址并完成认证，然后执行：
-   ```bash
-   git remote add origin git@github.com:<owner>/tokgrid-website.git
-   git push -u origin main
-   ```
-4. GA4 已默认启用；如受众地区要求 opt-in，请在 Cloudflare Pages 增加同意机制，或用 `PUBLIC_GA_MEASUREMENT_ID=''` 禁用。
-5. 在 Cloudflare Pages 连接 GitHub，配置：
+3. GA4 已默认启用；如受众地区要求 opt-in，请在 Cloudflare Pages 增加同意机制，或用 `PUBLIC_GA_MEASUREMENT_ID=''` 禁用。
+4. 在 Cloudflare Pages 连接 GitHub，配置：
    - Framework preset: `Astro`
    - Build command: `npm run build`
    - Output directory: `dist`
    - Root directory: `/`
-6. 确认 DNS 托管状态后绑定 `tokgrid.app`；当前域名不可服务，不要覆盖现有 DNS 记录。
-7. 上线后更新 Chrome Web Store 的 Homepage URL 与 Support URL。
-8. 上线后提交 Google Search Console 与 Bing Webmaster Tools 的 sitemap。
-9. 确认是否要更新 Pro 方案说明；当前页面已确认不展示订阅价格。
+5. 确认 DNS 托管状态后绑定 `tokgrid.app`；当前域名不可服务，不要覆盖现有 DNS 记录。
+6. 上线后更新 Chrome Web Store 的 Homepage URL 与 Support URL。
+7. 上线后提交 Google Search Console 与 Bing Webmaster Tools 的 sitemap。
+8. 确认是否要更新 Pro 方案说明；当前页面已确认不展示订阅价格。
 
 ## G. 部署信息
 
@@ -189,11 +184,11 @@ GA4 启用后，第三方 `gtag.js` 会占用部分移动端性能预算，因�
 - 页面数：20 HTML；sitemap：19 URL
 - Chrome Web Store 链接：可访问（核验时 HTTP 200）
 - `https://tokgrid.app/`：当前 TLS/服务不可用
-- GitHub：本地 `main` 分支已提交；**没有配置 remote**，因此没有远程仓库 URL，也没有 push
+- GitHub：已配置 SSH remote 并 push `main` 到 `https://github.com/pandahicc/tokgrid-website`；CI 由 push 触发
 - GA4：生产构建已启用 `G-8SL1Y6HB4Q`
 - Cloudflare Pages / DNS：未执行
 
-在完成远程 push、Cloudflare 项目创建、自定义域名绑定与 HTTPS 验证之前，不应对外声称网站已上线。
+在完成 Cloudflare 项目创建、自定义域名绑定与 HTTPS 验证之前，不应对外声称网站已上线。
 
 ---
 

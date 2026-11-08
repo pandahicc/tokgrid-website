@@ -177,13 +177,12 @@ The repository includes `public/_headers` for Cloudflare Pages. Other hosts may 
 
 ### GitHub
 
-The repository is ready for a GitHub remote and CI. This checkout currently has **no
-remote configured**, so a push cannot be completed without a repository URL and
-credentials.
+The repository is pushed to
+[pandahicc/tokgrid-website](https://github.com/pandahicc/tokgrid-website) on `main`,
+using the SSH remote `git@github.com:pandahicc/tokgrid-website.git`.
 
 ```bash
-git remote add origin git@github.com:<owner>/tokgrid-website.git
-git push -u origin main
+git push
 ```
 
 The CI workflow in `.github/workflows/ci.yml` runs `npm ci` and `npm run verify` on
