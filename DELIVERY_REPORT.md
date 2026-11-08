@@ -39,7 +39,7 @@
 - 12 个真实截图预留槽位（当前显示明确占位，放入图片后自动替换）
 - GA4 已启用（`G-8SL1Y6HB4Q`；生产默认；可置空禁用）
 - 联系邮箱已接入 Support、Privacy、Footer 和 FAQ
-- GitHub Actions CI（build + check）
+- GitHub Actions CI（build + check，当前 passing）
 - 链接/SEO/JSON-LD/sitemap 自动检查脚本
 - 英文 README 与中文交付报告
 
@@ -159,7 +159,6 @@ GA4 启用后，第三方 `gtag.js` 会占用部分移动端性能预算，因�
 6. **Search Console / Bing Webmaster Tools**：未提交。
 7. **Pro 价格展示**：已确认不在网站展示；网站只说明 Pro 为付费升级，具体方案在扩展内查看。
 8. **法律/隐私审阅**：Privacy 已按当前代码事实编写，但正式上线前建议进行法律审阅。
-9. **GitHub Actions 运行结果**：CI 已随 push 触发；本环境 GitHub API 触发限流，未能查询结果，请在仓库 Actions 页面确认。
 
 ## F. 用户需要执行的操作
 
@@ -184,7 +183,8 @@ GA4 启用后，第三方 `gtag.js` 会占用部分移动端性能预算，因�
 - 页面数：20 HTML；sitemap：19 URL
 - Chrome Web Store 链接：可访问（核验时 HTTP 200）
 - `https://tokgrid.app/`：当前 TLS/服务不可用
-- GitHub：已配置 SSH remote 并 push `main` 到 `https://github.com/pandahicc/tokgrid-website`；CI 由 push 触发
+- GitHub：已配置 SSH remote 并 push `main` 到 `https://github.com/pandahicc/tokgrid-website`
+- GitHub Actions：CI badge 显示 **passing**
 - GA4：生产构建已启用 `G-8SL1Y6HB4Q`
 - Cloudflare Pages / DNS：未执行
 
