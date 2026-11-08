@@ -1,11 +1,371 @@
 ---
-import Welcome from '../components/Welcome.astro';
-import Layout from '../layouts/Layout.astro';
+import ArticleCard from '../components/ArticleCard.astro';
+import CTA from '../components/CTA.astro';
+import FAQ from '../components/FAQ.astro';
+import FeatureCard from '../components/FeatureCard.astro';
+import Icon from '../components/Icon.astro';
+import InstallButton from '../components/InstallButton.astro';
+import ScreenshotSlot from '../components/ScreenshotSlot.astro';
+import SectionHeading from '../components/SectionHeading.astro';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getPublishedGuides } from '../lib/content';
+import { HOME_FAQS } from '../data/faqs';
+import { FEATURES, SITE, USE_CASES } from '../data/site';
+import {
+  faqSchema,
+  organizationSchema,
+  softwareApplicationSchema,
+  websiteSchema,
+} from '../lib/schema';
 
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+const guides = (await getPublishedGuides()).slice(0, 3);
+const jsonLd = [
+  organizationSchema(),
+  websiteSchema(),
+  softwareApplicationSchema(),
+  faqSchema(HOME_FAQS),
+];
+
+const steps = [
+  {
+    title: 'Open a supported public page',
+    description:
+      'Go to a public Home, video, hashtag, search, profile, Explore, or music list page. No TokGrid account is required for core use.',
+  },
+  {
+    title: 'Let TokGrid read what is already rendered',
+    description:
+      'The extension reads the cards the page has loaded, using read-only page data. It does not intercept network requests or call TikTok APIs to collect data.',
+  },
+  {
+    title: 'Filter, sort, and review the sample',
+    description:
+      'Use the Data and Stats tabs to narrow the list, compare medians and coverage, and inspect product anchors without leaving the page.',
+  },
+  {
+    title: 'Download or export what you need',
+    description:
+      'Save a single video or subtitle for free. Pro adds batch downloads, selected-video CSV/JSON export, and product data export.',
+  },
+];
+
+const comparison = [
+  ['Page overlay and hover details', true, true],
+  ['Data list, filters, sorting, and preview', true, true],
+  ['Sample analytics, Top 10, scatter, and content views', true, true],
+  ['Product research and category distribution', true, true],
+  ['Single video and single subtitle downloads', true, true],
+  ['Batch downloads with optional SRT sidecar', false, true],
+  ['Selected-video CSV/JSON export', false, true],
+  ['Product data CSV/JSON export', false, true],
+] as const;
 ---
 
-<Layout>
-	<Welcome />
-</Layout>
+<BaseLayout
+  title={SITE.title}
+  description={SITE.description}
+  canonicalPath="/"
+  jsonLd={jsonLd}
+>
+  <section class="relative overflow-hidden border-b border-slate-200 bg-slate-50">
+    <div aria-hidden="true" class="pointer-events-none absolute inset-0 bg-grid opacity-60">
+    </div>
+    <div
+      aria-hidden="true"
+      class="pointer-events-none absolute -right-40 -top-32 h-96 w-96 rounded-full bg-brand-200/40 blur-3xl"
+    >
+    </div>
+    <div class="container-page relative py-16 sm:py-20 lg:py-24">
+      <div class="grid items-center gap-12 lg:grid-cols-[1.05fr_0.95fr] lg:gap-14">
+        <div>
+          <p
+            class="mb-5 inline-flex items-center gap-2 rounded-full border border-brand-200 bg-white px-3.5 py-1.5 text-xs font-bold uppercase tracking-[0.14em] text-brand-700 shadow-sm"
+          >
+            <span class="h-1.5 w-1.5 rounded-full bg-signal-500"></span>
+            Social Media Data Intelligence
+          </p>
+          <h1
+            class="max-w-2xl text-4xl font-bold leading-[1.08] tracking-tight text-slate-950 sm:text-5xl lg:text-6xl"
+          >
+            Turn TikTok Content Into Actionable Insights.
+          </h1>
+          <p class="mt-6 max-w-xl text-lg leading-8 text-slate-600">
+            Analyze video performance, research competitors, explore products, and
+            organize public page data — all in your browser.
+          </p>
+          <p class="mt-4 max-w-xl text-sm font-medium text-slate-500">
+            Research smarter. Understand content. Discover opportunities.
+          </p>
+          <div class="mt-8 flex flex-col items-start gap-4 sm:flex-row sm:items-center">
+            <InstallButton campaign="homepage-hero" size="lg" label="Add to Chrome — Free" showNote />
+            <a
+              href="/guides/"
+              class="inline-flex items-center gap-1.5 text-sm font-semibold text-slate-700 hover:text-brand-700"
+            >
+              Browse the guides
+              <Icon name="arrow" class="h-4 w-4" />
+            </a>
+          </div>
+          <ul class="mt-8 flex flex-wrap gap-x-5 gap-y-2 text-xs font-medium text-slate-500">
+            <li class="inline-flex items-center gap-1.5">
+              <Icon name="check" class="h-3.5 w-3.5 text-brand-600" />
+              No account for core use
+            </li>
+            <li class="inline-flex items-center gap-1.5">
+              <Icon name="check" class="h-3.5 w-3.5 text-brand-600" />
+              Local-first processing
+            </li>
+            <li class="inline-flex items-center gap-1.5">
+              <Icon name="check" class="h-3.5 w-3.5 text-brand-600" />
+              Public pages only
+            </li>
+          </ul>
+        </div>
+
+        <div class="relative">
+          <div
+            aria-hidden="true"
+            class="absolute -inset-3 rounded-3xl bg-gradient-to-br from-brand-200/70 via-white to-signal-500/10 blur-xl"
+          >
+          </div>
+          <div class="relative rounded-3xl border border-slate-200 bg-white p-2 shadow-xl">
+            <ScreenshotSlot
+              id="data-list"
+              caption="Product preview placeholder. Add a real TokGrid screenshot to public/images/screenshots/data-list-filters.webp."
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="border-b border-slate-200 bg-white py-16 sm:py-20">
+    <div class="container-page">
+      <SectionHeading
+        eyebrow="Core features"
+        title="A clearer view of the page already in front of you."
+        description="TokGrid organizes the public TikTok content your browser has loaded. It is built for research on a page sample, not for platform-wide estimates or complete account history."
+      />
+      <div class="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+        {FEATURES.map((feature) => <FeatureCard feature={feature} />)}
+      </div>
+      <p class="mt-6 max-w-3xl text-sm leading-6 text-slate-500">
+        Metrics are page snapshots. Missing metric values are excluded from medians and
+        rankings rather than treated as zero. <a href="/privacy/" class="font-semibold text-brand-700 hover:underline">See how data is handled.</a>
+      </p>
+    </div>
+  </section>
+
+  <section class="bg-slate-50 py-16 sm:py-20">
+    <div class="container-page">
+      <div class="grid gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:items-start">
+        <SectionHeading
+          eyebrow="Product preview"
+          title="Overlay context, then the detail behind it."
+          description="The page overlay gives you quick context. The panel gives you the list, the sample analytics, and the product anchors in one place."
+        />
+        <div class="grid gap-5 sm:grid-cols-2">
+          <ScreenshotSlot id="overlay" />
+          <ScreenshotSlot id="analytics" />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="border-y border-slate-200 bg-white py-16 sm:py-20">
+    <div class="container-page">
+      <SectionHeading
+        eyebrow="How it works"
+        title="Four steps, all on the page you opened."
+        description="No separate dashboard, no upload step, and no background crawl."
+      />
+      <ol class="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+        {
+          steps.map((step, index) => (
+            <li class="rounded-2xl border border-slate-200 bg-slate-50 p-6">
+              <span class="inline-flex h-8 w-8 items-center justify-center rounded-full bg-brand-600 text-sm font-bold text-white">
+                {index + 1}
+              </span>
+              <h3 class="mt-4 text-base font-bold text-slate-950">{step.title}</h3>
+              <p class="mt-2 text-sm leading-6 text-slate-600">{step.description}</p>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </section>
+
+  <section class="bg-white py-16 sm:py-20">
+    <div class="container-page">
+      <SectionHeading
+        eyebrow="Use cases"
+        title="Built for people who work with public content."
+        description="TokGrid is for sellers, product researchers, content marketers, creators, and analysts who need a cleaner sample before they make a decision."
+      />
+      <div class="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+        {
+          USE_CASES.map((useCase) => (
+            <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+              <span class="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-brand-50 text-brand-700">
+                <Icon name={useCase.icon} class="h-5 w-5" />
+              </span>
+              <h3 class="mt-4 text-base font-bold text-slate-950">{useCase.title}</h3>
+              <p class="mt-2 text-sm leading-6 text-slate-600">{useCase.description}</p>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="border-y border-slate-200 bg-slate-50 py-16 sm:py-20">
+    <div class="container-page">
+      <SectionHeading
+        eyebrow="Free and Pro"
+        title="Start with the free core. Upgrade for batch work."
+        description="Pro is a paid upgrade. Pricing is shown in the extension’s subscription flow; this page does not publish a fixed price."
+      />
+      <div class="mt-10 overflow-x-auto rounded-2xl border border-slate-200 bg-white shadow-sm">
+        <table class="w-full border-collapse text-left text-sm">
+          <caption class="sr-only">Free and Pro feature comparison</caption>
+          <thead>
+            <tr class="border-b border-slate-200 bg-slate-50">
+              <th scope="col" class="px-3 py-3 sm:px-5 sm:py-4 font-bold text-slate-900">Capability</th>
+              <th scope="col" class="px-3 py-3 sm:px-5 sm:py-4 whitespace-nowrap text-center font-bold text-slate-900">Free</th>
+              <th scope="col" class="px-3 py-3 sm:px-5 sm:py-4 whitespace-nowrap text-center font-bold text-slate-900">Pro</th>
+            </tr>
+          </thead>
+          <tbody>
+            {
+              comparison.map(([label, free, pro]) => (
+                <tr class="border-b border-slate-100 last:border-0">
+                  <th scope="row" class="px-3 py-3 sm:px-5 sm:py-3.5 font-medium text-slate-700">
+                    {label}
+                  </th>
+                  <td class="px-3 py-3 sm:px-5 sm:py-3.5 text-center">
+                    {free ? (
+                      <Icon name="check" class="mx-auto h-5 w-5 text-emerald-600" />
+                    ) : (
+                      <span class="text-slate-300">—</span>
+                    )}
+                  </td>
+                  <td class="px-3 py-3 sm:px-5 sm:py-3.5 text-center">
+                    {pro ? (
+                      <Icon name="check" class="mx-auto h-5 w-5 text-emerald-600" />
+                    ) : (
+                      <span class="text-slate-300">—</span>
+                    )}
+                  </td>
+                </tr>
+              ))
+            }
+          </tbody>
+        </table>
+      </div>
+      <p class="mt-4 text-xs leading-5 text-slate-500">
+        Core features do not require an account. Pro activation uses the extension’s
+        subscription flow. Feature availability depends on what the public page exposes.
+      </p>
+    </div>
+  </section>
+
+  <section class="bg-white py-16 sm:py-20">
+    <div class="container-page">
+      <div class="rounded-3xl border border-brand-200 bg-brand-50/60 p-6 sm:p-10">
+        <div class="grid gap-8 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
+          <div>
+            <p class="text-xs font-bold uppercase tracking-[0.16em] text-brand-700">
+              Local-first by design
+            </p>
+            <h2 class="mt-3 text-3xl font-bold tracking-tight text-slate-950">
+              Page data stays in your browser.
+            </h2>
+            <p class="mt-4 text-base leading-7 text-slate-600">
+              TokGrid processes the public page data it can read locally. Subscription
+              validation is a separate, narrowly scoped license check. The website itself
+              does not load analytics by default.
+            </p>
+            <a
+              href="/privacy/"
+              class="mt-5 inline-flex items-center gap-1.5 text-sm font-semibold text-brand-700 hover:text-brand-800"
+            >
+              Read the Privacy Policy
+              <Icon name="arrow" class="h-4 w-4" />
+            </a>
+          </div>
+          <ul class="grid gap-4 sm:grid-cols-3">
+            <li class="rounded-2xl bg-white p-5 shadow-sm">
+              <Icon name="shield" class="h-5 w-5 text-brand-700" />
+              <p class="mt-3 text-sm font-bold text-slate-900">Local page processing</p>
+              <p class="mt-1.5 text-xs leading-5 text-slate-600">
+                Page data is not uploaded to TokGrid.
+              </p>
+            </li>
+            <li class="rounded-2xl bg-white p-5 shadow-sm">
+              <Icon name="lock" class="h-5 w-5 text-brand-700" />
+              <p class="mt-3 text-sm font-bold text-slate-900">No request interception</p>
+              <p class="mt-1.5 text-xs leading-5 text-slate-600">
+                No fetch/XHR override and no background TikTok API collection.
+              </p>
+            </li>
+            <li class="rounded-2xl bg-white p-5 shadow-sm">
+              <Icon name="info" class="h-5 w-5 text-brand-700" />
+              <p class="mt-3 text-sm font-bold text-slate-900">No telemetry</p>
+              <p class="mt-1.5 text-xs leading-5 text-slate-600">
+                The extension has no analytics or telemetry.
+              </p>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {
+    guides.length > 0 && (
+      <section class="border-y border-slate-200 bg-slate-50 py-16 sm:py-20">
+        <div class="container-page">
+          <div class="flex flex-wrap items-end justify-between gap-4">
+            <SectionHeading
+              eyebrow="Guides"
+              title="Practical notes for public-page research."
+              description="Start with the question you are trying to answer, then use the page sample you can actually see."
+            />
+            <a
+              href="/guides/"
+              class="inline-flex items-center gap-1.5 text-sm font-semibold text-brand-700 hover:text-brand-800"
+            >
+              All guides
+              <Icon name="arrow" class="h-4 w-4" />
+            </a>
+          </div>
+          <div class="mt-8 grid gap-5 md:grid-cols-3">
+            {guides.map((guide) => <ArticleCard entry={guide} />)}
+          </div>
+        </div>
+      </section>
+    )
+  }
+
+  <section class="bg-white py-16 sm:py-20">
+    <div class="container-page">
+      <SectionHeading
+        eyebrow="FAQ"
+        title="Questions, answered."
+        description="The short version of what TokGrid does, what it needs, and what it deliberately does not claim."
+        align="center"
+      />
+      <div class="mx-auto mt-10 max-w-4xl">
+        <FAQ items={HOME_FAQS} />
+      </div>
+    </div>
+  </section>
+
+  <CTA
+    campaign="homepage-final"
+    title="Research smarter. Understand content. Discover opportunities."
+    description="Install TokGrid, open a supported public TikTok page, and work from the sample you can actually see."
+    secondaryHref="/guides/"
+    secondaryLabel="Read the guides first"
+  />
+</BaseLayout>

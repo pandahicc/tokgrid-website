@@ -1,0 +1,33 @@
+---
+import { render } from 'astro:content';
+import ArticleLayout from '../../layouts/ArticleLayout.astro';
+import {
+  getPublishedGuides,
+  getPrevNext,
+  getRelatedGuides,
+} from '../../lib/content';
+
+export async function getStaticPaths() {
+  const guides = await getPublishedGuides();
+  return guides.map((entry) => ({
+    params: { slug: entry.id },
+    props: { entry },
+  }));
+}
+
+const { entry } = Astro.props;
+const { Content, headings } = await render(entry);
+const all = await getPublishedGuides();
+const related = getRelatedGuides(entry, all, 3);
+const { prev, next } = getPrevNext(entry, all);
+---
+
+<ArticleLayout
+  entry={entry}
+  headings={headings}
+  related={related}
+  prev={prev}
+  next={next}
+>
+  <Content />
+</ArticleLayout>

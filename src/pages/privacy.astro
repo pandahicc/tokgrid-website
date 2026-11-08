@@ -1,0 +1,246 @@
+---
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import Icon from '../components/Icon.astro';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { breadcrumbSchema } from '../lib/schema';
+import { SITE } from '../data/site';
+
+const title = 'Privacy Policy — TokGrid';
+const description =
+  'How TokGrid handles public page data, extension storage, subscription validation, feedback forms, and this static website.';
+const gaEnabled = Boolean(import.meta.env.PUBLIC_GA_MEASUREMENT_ID);
+const lastUpdated = 'November 8, 2026';
+const jsonLd = [
+  breadcrumbSchema([
+    { name: 'Home', href: '/' },
+    { name: 'Privacy', href: '/privacy/' },
+  ]),
+];
+---
+
+<BaseLayout title={title} description={description} canonicalPath="/privacy/" jsonLd={jsonLd}>
+  <section class="border-b border-slate-200 bg-slate-50">
+    <div class="container-page py-10 sm:py-14">
+      <Breadcrumbs
+        items={[
+          { name: 'Home', href: '/' },
+          { name: 'Privacy', href: '/privacy/' },
+        ]}
+      />
+      <div class="mt-8 max-w-3xl">
+        <p class="text-xs font-bold uppercase tracking-[0.18em] text-brand-600">
+          Legal & privacy
+        </p>
+        <h1 class="mt-4 text-4xl font-bold tracking-tight text-slate-950 sm:text-5xl">
+          Privacy Policy
+        </h1>
+        <p class="mt-5 text-lg leading-8 text-slate-600">
+          This policy describes the TokGrid Chrome extension and this website. It is
+          written to match how the current build behaves, including the parts it does{' '}
+          <strong>not</strong> do.
+        </p>
+        <p class="mt-4 text-sm text-slate-500">Last updated: {lastUpdated}</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="container-page py-12 sm:py-16">
+    <div class="prose max-w-3xl">
+      <div class="not-prose mb-10 rounded-2xl border border-brand-200 bg-brand-50/70 p-5 text-sm leading-6 text-brand-950">
+        <div class="flex gap-3">
+          <Icon name="shield" class="mt-0.5 h-5 w-5 shrink-0 text-brand-700" />
+          <p>
+            <strong>Short version:</strong> the extension processes public page data in
+            your browser. Page data is not uploaded to TokGrid. A separate license check
+            may contact the subscription server with an account identifier and token.
+            This website is static and, by default, loads no analytics.
+          </p>
+        </div>
+      </div>
+
+      <h2>1. Scope</h2>
+      <p>
+        This policy covers the TokGrid browser extension and the public website at{' '}
+        <a href={SITE.url}>{SITE.url}</a>. It does not cover TikTok, the Chrome Web
+        Store, Tally, the payment processor, or any other third-party service you choose
+        to use. Those services have their own policies.
+      </p>
+
+      <h2>2. What the extension reads</h2>
+      <p>
+        TokGrid is built for public TikTok pages you have opened. It reads information
+        that is already present in the page: cards rendered in the DOM, read-only React
+        props exposed by the page, and embedded page JSON. The fields can include video
+        IDs, descriptions, counts, author details, product anchors, video qualities, and
+        subtitle links, depending on what the page makes available.
+      </p>
+      <p>
+        The extension does not bypass login, CAPTCHA, or rate limits. It is intended for
+        public, logged-out pages. It does not collect private messages, account
+        credentials, or content that is not already loaded in the page.
+      </p>
+
+      <h2>3. Where page data is processed</h2>
+      <p>
+        Page data is processed locally in your browser. TokGrid does not upload page data
+        to a TokGrid server. It does not overwrite <code>fetch</code> or{' '}
+        <code>XMLHttpRequest</code>, does not intercept network requests, and does not
+        make background TikTok API calls to collect data. There is no analytics or
+        telemetry in the extension.
+      </p>
+      <p>
+        Settings and an encrypted subscription credential are stored in{' '}
+        <code>chrome.storage.local</code>. Page content used by the panel is kept in the
+        page context and is not sent to TokGrid.
+      </p>
+
+      <h2>4. What leaves the browser</h2>
+      <p>
+        Three narrow flows can involve a network request. They are separate from page
+        data collection:
+      </p>
+      <ul>
+        <li>
+          <strong>Downloads and subtitles.</strong> When you click a download control,
+          the extension requests the media or subtitle URL from TikTok media domains and
+          writes the file locally. The request is user-initiated.
+        </li>
+        <li>
+          <strong>Subscription validation.</strong> When you open the subscription flow,
+          restore a token, refresh status, return from checkout, reopen the extension with
+          a pending payment, or trigger a paid feature while a check is required, the
+          extension contacts the license server at <code>pandahi.cc</code>. The request
+          can include an account identifier, token, channel, and operation type. It does{' '}
+          <strong>not</strong> include page data.
+        </li>
+        <li>
+          <strong>Feedback forms.</strong> The Feedback tab opens a Tally-hosted form in a
+          new page. The URL can be prefilled with a device ID, extension version, and
+          interface language. The form content (email, review link, or message) is
+          submitted by you on Tally’s page. The extension does not read, save, or upload
+          those form contents and does not receive a host permission for Tally.
+        </li>
+      </ul>
+
+      <h2>5. Permissions</h2>
+      <p>The current extension manifest requests:</p>
+      <ul>
+        <li><code>storage</code> — settings and the encrypted subscription credential.</li>
+        <li>
+          Host permissions for <code>*.tiktok.com</code>, <code>*.tiktokcdn.com</code>,
+          and <code>*.tiktokv.com</code> — the read-only page script and user-initiated
+          media/subtitle requests.
+        </li>
+        <li>
+          Host permission for <code>pandahi.cc</code> — subscription activation, token
+          restore, status refresh, return from checkout, and the pending-payment check.
+        </li>
+      </ul>
+      <p>
+        The extension does not request <code>downloads</code>, <code>webRequest</code>,
+        <code>scripting</code>, <code>tabs</code>, or <code>&lt;all_urls&gt;</code>.
+        Single-file downloads use a local Blob and a download link. Batch downloads use
+        the browser’s File System Access API and a folder you explicitly choose.
+      </p>
+
+      <h2>6. Storage and retention</h2>
+      <ul>
+        <li>Settings stay in local extension storage until you clear them or uninstall the extension.</li>
+        <li>The encrypted subscription credential stays until you sign out, clear it, or uninstall.</li>
+        <li>The extension’s network activity log is kept in memory and is cleared when the page is refreshed.</li>
+        <li>Downloaded files are written to the folder you choose and remain under your control.</li>
+        <li>Tally submissions are handled by the operator for support and reward follow-up, subject to the form’s own terms.</li>
+      </ul>
+
+      <h2>7. This website</h2>
+      <p>
+        This website is a static site. By default it does not load Google Analytics, a
+        tag manager, advertising pixels, embedded videos, third-party fonts, or contact
+        forms. It does not set cookies or tracking identifiers. The site is designed to
+        be served by a static hosting provider, such as Cloudflare Pages; the hosting
+        provider may process standard request metadata (such as IP address, user agent,
+        and timestamp) for delivery, security, and abuse prevention under its own
+        policy.
+      </p>
+
+      {
+        gaEnabled ? (
+          <>
+            <h3>Google Analytics (enabled on this build)</h3>
+            <p>
+              This build has a Google Analytics 4 measurement ID configured. GA4 may
+              collect page views, approximate location derived from the request,
+              device/browser information, and interaction events, and may set
+              <code>_ga</code> cookies. TokGrid uses this only to understand aggregate
+              website usage. You can block GA with browser settings, an extension, or
+              a consent control where one is required. The extension itself does not
+              contain Google Analytics.
+            </p>
+          </>
+        ) : (
+          <>
+            <h3>Google Analytics (not enabled on this build)</h3>
+            <p>
+              No Google Analytics measurement ID is configured for this build, so the
+              GA tag is not rendered. If a measurement ID is later configured at build
+              time, this section and the site’s script loading will change together.
+            </p>
+          </>
+        )
+      }
+
+      <h2>8. Cookies</h2>
+      <p>
+        This website does not set its own cookies. If Google Analytics is enabled in
+        this build, GA may set its own cookies as described above. The extension uses
+        extension storage, not website cookies, for its settings.
+      </p>
+
+      <h2>9. Third parties</h2>
+      <ul>
+        <li><strong>Chrome Web Store</strong> — distribution and installation. Its own policies apply.</li>
+        <li><strong>pandahi.cc</strong> — subscription checkout and license validation.</li>
+        <li><strong>Tally</strong> — user-opened feedback and reward forms.</li>
+        <li><strong>Static hosting provider</strong> — website delivery and standard request logs.</li>
+        <li><strong>Google Analytics</strong> — only when a measurement ID is configured for the site build.</li>
+      </ul>
+      <p>
+        TokGrid does not sell page data. It does not use page data for advertising. It
+        does not share page data with the subscription server.
+      </p>
+
+      <h2>10. Your choices</h2>
+      <ul>
+        <li>Clear settings and page data from the extension’s Settings tab.</li>
+        <li>Uninstall the extension to remove its local extension storage.</li>
+        <li>Refresh the page to clear the in-memory activity log.</li>
+        <li>Choose your own download folder, or cancel a batch before or during a run.</li>
+        <li>Block or delete analytics cookies in your browser if GA is enabled.</li>
+        <li>Contact support to request help with a Tally submission or a privacy question.</li>
+      </ul>
+
+      <h2>11. Contact</h2>
+      <p>
+        A dedicated public privacy and support contact is still being finalized. Until it
+        is published, use the support link on the Chrome Web Store listing. Do not send
+        page data, account credentials, or subscription tokens in a support request.
+      </p>
+
+      <h2>12. Changes</h2>
+      <p>
+        This policy may change as the extension and website evolve. The “Last updated”
+        date at the top will change when it does. Material changes should be reviewed
+        before the next public release.
+      </p>
+
+      <div class="not-prose mt-10 rounded-2xl border border-slate-200 bg-slate-50 p-5 text-sm leading-6 text-slate-600">
+        <p class="font-semibold text-slate-900">Independent product</p>
+        <p class="mt-2">
+          TokGrid is an independent browser extension and is not affiliated with,
+          endorsed by, or sponsored by TikTok or ByteDance. TikTok and related marks are
+          trademarks of their respective owners.
+        </p>
+      </div>
+    </div>
+  </div>
+</BaseLayout>

@@ -1,0 +1,278 @@
+---
+import ArticleCard from '../../components/ArticleCard.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import CTA from '../../components/CTA.astro';
+import FAQ from '../../components/FAQ.astro';
+import Icon from '../../components/Icon.astro';
+import InstallButton from '../../components/InstallButton.astro';
+import ScreenshotSlot from '../../components/ScreenshotSlot.astro';
+import SectionHeading from '../../components/SectionHeading.astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { BULK_DOWNLOAD_FAQS } from '../../data/faqs';
+import { getGuidesForFeature, getPublishedGuides } from '../../lib/content';
+import { breadcrumbSchema, faqSchema } from '../../lib/schema';
+
+const title = 'TikTok Video & Subtitle Downloads — TokGrid';
+const description =
+  'Download a single public TikTok video in an available quality, save VTT/SRT subtitles, or use Pro batch downloads with optional SRT sidecars.';
+
+const guides = await getPublishedGuides();
+const related = getGuidesForFeature('/features/bulk-download/', guides, 2);
+const jsonLd = [
+  breadcrumbSchema([
+    { name: 'Home', href: '/' },
+    { name: 'Features', href: '/features/' },
+    { name: 'Video & Subtitle Downloads', href: '/features/bulk-download/' },
+  ]),
+  faqSchema(BULK_DOWNLOAD_FAQS),
+];
+
+const comparison = [
+  ['Single video download', 'Yes', 'Yes'],
+  ['Single subtitle download', 'Yes', 'Yes'],
+  ['Available video qualities', 'Yes', 'Yes'],
+  ['Batch download to a chosen folder', '—', 'Yes'],
+  ['Three-way queue and streaming writes', '—', 'Yes'],
+  ['Batch progress, failure list, cancel', '—', 'Yes'],
+  ['Optional original-language SRT sidecar', '—', 'Yes'],
+  ['Selected-video CSV/JSON export', '—', 'Yes'],
+] as const;
+
+const limits = [
+  'Not every video has a playable source. Only videos with an available address can be downloaded.',
+  'Available qualities depend on the page data. TokGrid selects the highest available resolution, then the highest bitrate.',
+  'Not every video has subtitles. Original and translated tracks appear only when the page exposes them.',
+  'TokGrid does not bypass login, CAPTCHA, DRM, or other access controls.',
+  'Batch download requires Chrome 111 or newer and a folder you choose through the browser permission prompt.',
+  'A failed item is reported individually; it does not stop the rest of the queue. URLs can expire, so refresh and retry if needed.',
+];
+---
+
+<BaseLayout title={title} description={description} canonicalPath="/features/bulk-download/" jsonLd={jsonLd}>
+  <section class="border-b border-slate-200 bg-slate-50">
+    <div class="container-page py-10 sm:py-14">
+      <Breadcrumbs
+        items={[
+          { name: 'Home', href: '/' },
+          { name: 'Features', href: '/features/' },
+          { name: 'Video & Subtitle Downloads', href: '/features/bulk-download/' },
+        ]}
+      />
+      <div class="mt-8 grid gap-10 lg:grid-cols-[1.05fr_0.95fr] lg:items-center">
+        <div>
+          <p class="text-xs font-bold uppercase tracking-[0.18em] text-brand-600">
+            Downloads
+          </p>
+          <h1 class="mt-4 text-4xl font-bold tracking-tight text-slate-950 sm:text-5xl">
+            TikTok Video and Subtitle Downloads
+          </h1>
+          <p class="mt-5 max-w-2xl text-lg leading-8 text-slate-600">
+            Save a single video in an available quality or download its subtitle tracks
+            as VTT or SRT. On Pro, batch download the selected videos to a folder you
+            choose.
+          </p>
+          <div class="mt-7 flex flex-col items-start gap-3 sm:flex-row sm:items-center">
+            <InstallButton campaign="feature-bulk-download" label="Install TokGrid" />
+            <a href="/guides/how-to-bulk-download-tiktok-videos/" class="text-sm font-semibold text-brand-700 hover:underline">
+              Read the bulk download guide
+            </a>
+          </div>
+        </div>
+        <ScreenshotSlot id="download" />
+      </div>
+    </div>
+  </section>
+
+  <section class="bg-white py-14 sm:py-20">
+    <div class="container-page">
+      <div class="grid gap-5 md:grid-cols-3">
+        {[
+          ['Single downloads', 'Save one video in an available quality, or save its original and translated subtitle tracks. Both are free.'],
+          ['Pro batch workflow', 'Select multiple videos and write them to a folder with a three-way queue, streaming writes, and progress reporting.'],
+          ['Subtitle sidecar', 'Pro can save one original-language SRT per video alongside the downloaded media.'],
+        ].map(([heading, text]) => (
+          <div class="rounded-2xl border border-slate-200 bg-slate-50 p-6">
+            <h2 class="text-base font-bold text-slate-950">{heading}</h2>
+            <p class="mt-2 text-sm leading-6 text-slate-600">{text}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="border-y border-slate-200 bg-white py-14 sm:py-20">
+    <div class="container-page">
+      <SectionHeading
+        eyebrow="Free and Pro"
+        title="Single downloads are free. Batch work is Pro."
+        description="Pro is a paid upgrade. Pricing is shown in the extension’s subscription flow; this page does not publish a fixed price."
+      />
+      <div class="mt-8 overflow-x-auto rounded-2xl border border-slate-200">
+        <table class="w-full border-collapse text-left text-sm">
+          <caption class="sr-only">Free and Pro download comparison</caption>
+          <thead class="bg-slate-50">
+            <tr>
+              <th scope="col" class="px-3 py-3 sm:px-5 sm:py-3.5 font-bold text-slate-900">Capability</th>
+              <th scope="col" class="px-3 py-3 sm:px-5 sm:py-3.5 whitespace-nowrap text-center font-bold text-slate-900">Free</th>
+              <th scope="col" class="px-3 py-3 sm:px-5 sm:py-3.5 whitespace-nowrap text-center font-bold text-slate-900">Pro</th>
+            </tr>
+          </thead>
+          <tbody>
+            {comparison.map(([label, free, pro]) => (
+              <tr class="border-t border-slate-100">
+                <th scope="row" class="px-3 py-3 sm:px-5 sm:py-3.5 font-medium text-slate-700">{label}</th>
+                <td class="px-3 py-3 sm:px-5 sm:py-3.5 text-center text-slate-600">{free}</td>
+                <td class="px-3 py-3 sm:px-5 sm:py-3.5 text-center text-slate-600">{pro}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section class="bg-slate-50 py-14 sm:py-20">
+    <div class="container-page">
+      <div class="grid gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:items-start">
+        <SectionHeading
+          eyebrow="Single downloads"
+          title="Quality and subtitle options, where available."
+          description="The download controls appear only when the page exposes a playable source or subtitle track."
+        />
+        <div class="rounded-2xl border border-slate-200 bg-white p-6">
+          <ul class="space-y-3 text-sm leading-6 text-slate-600">
+            <li class="flex gap-3"><Icon name="check" class="mt-1 h-4 w-4 shrink-0 text-brand-600" />Choose from the available video qualities; the highest resolution is selected by default.</li>
+            <li class="flex gap-3"><Icon name="check" class="mt-1 h-4 w-4 shrink-0 text-brand-600" />When resolutions tie, the highest bitrate is preferred.</li>
+            <li class="flex gap-3"><Icon name="check" class="mt-1 h-4 w-4 shrink-0 text-brand-600" />Download original and translated subtitle tracks as VTT or SRT.</li>
+            <li class="flex gap-3"><Icon name="check" class="mt-1 h-4 w-4 shrink-0 text-brand-600" />If the primary subtitle source fails, TokGrid can try a backup source exposed by the page.</li>
+            <li class="flex gap-3"><Icon name="check" class="mt-1 h-4 w-4 shrink-0 text-brand-600" />Filename templates can be adjusted in Settings.</li>
+          </ul>
+          <p class="mt-5 rounded-xl bg-slate-50 p-4 text-xs leading-5 text-slate-500">
+            Availability is determined by the page. A video can have no playable source,
+            and a subtitle track can be absent even when the video is playable.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="border-y border-slate-200 bg-white py-14 sm:py-20">
+    <div class="container-page">
+      <div class="grid gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
+        <div>
+          <SectionHeading
+            eyebrow="Batch downloads"
+            title="A queue that writes directly to your folder."
+            description="Pro batch download asks for a destination folder, then writes selected videos with streaming writes instead of holding whole files in memory."
+          />
+          <ul class="mt-6 space-y-3 text-sm leading-6 text-slate-600">
+            <li class="flex gap-3"><Icon name="check" class="mt-1 h-4 w-4 shrink-0 text-brand-600" />Three-way concurrent queue with overall and per-item progress.</li>
+            <li class="flex gap-3"><Icon name="check" class="mt-1 h-4 w-4 shrink-0 text-brand-600" />Per-item failures are reported without stopping the rest of the queue.</li>
+            <li class="flex gap-3"><Icon name="check" class="mt-1 h-4 w-4 shrink-0 text-brand-600" />Cancel control and a failure list for follow-up.</li>
+            <li class="flex gap-3"><Icon name="check" class="mt-1 h-4 w-4 shrink-0 text-brand-600" />Optional original-language SRT sidecar for each video.</li>
+            <li class="flex gap-3"><Icon name="check" class="mt-1 h-4 w-4 shrink-0 text-brand-600" />Selection is shared with the Pro CSV/JSON export workflow.</li>
+          </ul>
+        </div>
+        <ScreenshotSlot id="batch" />
+      </div>
+    </div>
+  </section>
+
+  <section class="bg-slate-50 py-14 sm:py-20">
+    <div class="container-page">
+      <div class="grid gap-10 lg:grid-cols-[0.85fr_1.15fr] lg:items-start">
+        <SectionHeading
+          eyebrow="How to download"
+          title="Select, choose a folder, and monitor the queue."
+          description="A practical workflow for a Pro batch download."
+        />
+        <ol class="space-y-4">
+          {[
+            ['Select the videos', 'Use filters and sorting to narrow the list, then select individual rows or all current filtered candidates.'],
+            ['Start batch download', 'Choose batch download, then select a destination folder in the browser prompt.'],
+            ['Choose subtitle sidecars', 'If you want subtitles with the videos, enable the original-language SRT option before starting.'],
+            ['Monitor progress', 'Watch the overall and per-item progress. Failed items are listed separately and can be retried.'],
+            ['Review the folder', 'Confirm the files are present and playable. Use the content only when you have the rights to do so.'],
+          ].map(([step, text], index) => (
+            <li class="flex gap-4 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+              <span class="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-brand-600 text-sm font-bold text-white">
+                {index + 1}
+              </span>
+              <div>
+                <h3 class="text-sm font-bold text-slate-950">{step}</h3>
+                <p class="mt-1.5 text-sm leading-6 text-slate-600">{text}</p>
+              </div>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  <section class="border-y border-slate-200 bg-white py-14 sm:py-20">
+    <div class="container-page">
+      <div class="rounded-3xl border border-amber-200 bg-amber-50 p-6 sm:p-8">
+        <div class="flex gap-4">
+          <Icon name="alert" class="mt-0.5 h-6 w-6 shrink-0 text-amber-600" />
+          <div>
+            <h2 class="text-lg font-bold text-slate-950">Only download content you have the rights to use.</h2>
+            <p class="mt-2 max-w-3xl text-sm leading-7 text-slate-700">
+              Follow applicable law, TikTok’s terms, and the content owner’s permissions.
+              TokGrid does not provide legal permission and does not bypass access controls,
+              DRM, or other restrictions. Availability is not the same as authorization.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="bg-white py-14 sm:py-20">
+    <div class="container-page">
+      <SectionHeading eyebrow="Limits" title="What to expect when a download is not available." />
+      <div class="mt-8 grid gap-4 md:grid-cols-2">
+        {limits.map((limit) => (
+          <div class="flex gap-3 rounded-xl border border-slate-200 bg-slate-50 p-4 text-sm leading-6 text-slate-600">
+            <Icon name="alert" class="mt-0.5 h-4 w-4 shrink-0 text-signal-500" />
+            <p>{limit}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="border-y border-slate-200 bg-slate-50 py-14 sm:py-20">
+    <div class="container-page">
+      <SectionHeading eyebrow="FAQ" title="Download questions." align="center" />
+      <div class="mx-auto mt-8 max-w-4xl">
+        <FAQ items={BULK_DOWNLOAD_FAQS} />
+      </div>
+    </div>
+  </section>
+
+  {
+    related.length > 0 && (
+      <section class="bg-white py-14 sm:py-20">
+        <div class="container-page">
+          <div class="flex flex-wrap items-end justify-between gap-4">
+            <SectionHeading eyebrow="Guides" title="Go deeper" />
+            <a href="/guides/" class="inline-flex items-center gap-1.5 text-sm font-semibold text-brand-700 hover:text-brand-800">
+              All guides <Icon name="arrow" class="h-4 w-4" />
+            </a>
+          </div>
+          <div class="mt-8 grid gap-5 md:grid-cols-2">
+            {related.map((guide) => <ArticleCard entry={guide} />)}
+          </div>
+        </div>
+      </section>
+    )
+  }
+
+  <CTA
+    campaign="feature-bulk-download-final"
+    title="Download a single video for free, or batch the workflow on Pro."
+    description="Install TokGrid and open a supported public page. Only download content you have the rights to use."
+    secondaryHref="/guides/how-to-bulk-download-tiktok-videos/"
+    secondaryLabel="How to bulk download videos"
+  />
+</BaseLayout>

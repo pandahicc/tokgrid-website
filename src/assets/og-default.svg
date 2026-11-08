@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <radialGradient id="glow" cx="0.15" cy="0.1" r="0.8">
+      <stop offset="0" stop-color="#4f46e5" stop-opacity="0.55"/>
+      <stop offset="1" stop-color="#4f46e5" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="glow2" cx="0.9" cy="0.9" r="0.7">
+      <stop offset="0" stop-color="#f43f5e" stop-opacity="0.28"/>
+      <stop offset="1" stop-color="#f43f5e" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="1200" height="630" fill="#0f172a"/>
+  <rect width="1200" height="630" fill="url(#glow)"/>
+  <rect width="1200" height="630" fill="url(#glow2)"/>
+  <g stroke="#818cf8" stroke-opacity="0.12" stroke-width="1">
+    <path d="M0 120h1200M0 240h1200M0 360h1200M0 480h1200M160 0v630M320 0v630M480 0v630M640 0v630M800 0v630M960 0v630M1120 0v630"/>
+  </g>
+  <g transform="translate(80 72)">
+    <rect width="26" height="26" rx="7" fill="#ffffff"/>
+    <rect x="34" width="26" height="26" rx="7" fill="#818cf8"/>
+    <rect y="34" width="26" height="26" rx="7" fill="#6366f1"/>
+    <rect x="34" y="34" width="26" height="26" rx="7" fill="#f43f5e"/>
+    <text x="82" y="28" font-family="DejaVu Sans, sans-serif" font-size="34" font-weight="700" fill="#ffffff">TokGrid</text>
+  </g>
+  <text x="80" y="318" font-family="DejaVu Sans, sans-serif" font-size="66" font-weight="700" fill="#ffffff">Turn TikTok content</text>
+  <text x="80" y="398" font-family="DejaVu Sans, sans-serif" font-size="66" font-weight="700" fill="#c7d2fe">into actionable insights.</text>
+  <text x="80" y="466" font-family="DejaVu Sans, sans-serif" font-size="27" fill="#a5b4fc">Public page analytics, product research, downloads, and structured export.</text>
+  <line x1="80" y1="520" x2="1120" y2="520" stroke="#334155" stroke-width="1"/>
+  <text x="80" y="570" font-family="DejaVu Sans, sans-serif" font-size="22" fill="#cbd5e1">Local-first Chrome extension</text>
+  <text x="1120" y="570" text-anchor="end" font-family="DejaVu Sans, sans-serif" font-size="22" font-weight="700" fill="#ffffff">tokgrid.app</text>
+</svg>

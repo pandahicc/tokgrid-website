@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+
+# TokGrid welcomes search and AI-search crawlers, including OAI-SearchBot.
+# This site does not publish an llms.txt and does not treat it as an indexing guarantee.
+Sitemap: https://tokgrid.app/sitemap.xml

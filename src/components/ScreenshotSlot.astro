@@ -1,0 +1,68 @@
+---
+import { existsSync } from 'node:fs';
+import { join } from 'node:path';
+import { SCREENSHOTS, type ScreenshotId } from '../data/screenshots';
+
+interface Props {
+  id: ScreenshotId;
+  caption?: string;
+  className?: string;
+}
+
+const { id, caption, className = '' } = Astro.props;
+const definition = SCREENSHOTS[id];
+
+if (!definition) {
+  throw new Error(
+    `Unknown screenshot slot "${id}". Add it to src/data/screenshots.ts.`,
+  );
+}
+
+const publicRoot = join(process.cwd(), 'public');
+const extensions = ['webp', 'avif', 'png', 'jpg', 'jpeg'];
+const relativeBase = definition.base.replace(/^\//, '');
+const match = extensions
+  .map((extension) => {
+    const publicPath = `${relativeBase}.${extension}`;
+    return existsSync(join(publicRoot, publicPath))
+      ? `${definition.base}.${extension}`
+      : null;
+  })
+  .find((value): value is string => value !== null);
+---
+
+{
+  match ? (
+    <figure class:list={['screenshot-figure', className]}>
+      <img
+        src={match}
+        alt={definition.alt}
+        width={definition.width}
+        height={definition.height}
+        loading="lazy"
+        decoding="async"
+      />
+      <figcaption>{caption ?? definition.description}</figcaption>
+    </figure>
+  ) : (
+    <figure
+      class:list={['screenshot-placeholder', className]}
+      data-placeholder="screenshot"
+      data-expected={`${definition.base}.webp`}
+    >
+      <div class="screenshot-placeholder__inner">
+        <span class="screenshot-placeholder__badge">Screenshot placeholder</span>
+        <span class="screenshot-placeholder__title">{definition.title}</span>
+        <p class="screenshot-placeholder__desc">{definition.description}</p>
+        <code class="screenshot-placeholder__path">{definition.base}.webp</code>
+      </div>
+      {
+        caption && (
+          <figcaption class="mt-3 px-1 text-xs leading-5 text-slate-500">
+            {caption}
+          </figcaption>
+        )
+      }
+    </figure>
+  )
+}

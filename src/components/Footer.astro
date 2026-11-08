@@ -1,0 +1,76 @@
+---
+import { FOOTER_COLUMNS, SITE, storeUrl } from '../data/site';
+import Icon from './Icon.astro';
+
+const year = new Date().getFullYear();
+const storeLink = storeUrl('footer');
+---
+
+<footer class="border-t border-slate-200 bg-slate-50">
+  <div class="container-page py-14 sm:py-16">
+    <div class="grid gap-10 lg:grid-cols-[1.4fr_1fr_1fr_1fr]">
+      <div class="max-w-sm">
+        <a href="/" class="flex items-center gap-2.5" aria-label="TokGrid home">
+          <img
+            src="/images/tokgrid-icon-48.png"
+            width="32"
+            height="32"
+            alt=""
+            class="h-8 w-8 rounded-lg"
+          />
+          <span class="text-lg font-bold tracking-tight text-slate-950">TokGrid</span>
+        </a>
+        <p class="mt-4 text-sm leading-6 text-slate-600">
+          A local-first Chrome extension for TikTok video analytics, product research,
+          video and subtitle downloads, and structured data export.
+        </p>
+        <a
+          href={storeLink}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="mt-5 inline-flex items-center gap-1.5 text-sm font-semibold text-brand-700 hover:text-brand-800"
+        >
+          Add to Chrome
+          <Icon name="external" class="h-3.5 w-3.5" />
+          <span class="sr-only">(opens in a new tab)</span>
+        </a>
+      </div>
+
+      {
+        FOOTER_COLUMNS.map((column) => (
+          <div>
+            <h2 class="text-xs font-bold uppercase tracking-[0.14em] text-slate-500">
+              {column.title}
+            </h2>
+            <ul class="mt-4 space-y-2.5">
+              {column.links.map((link) => (
+                <li>
+                  <a
+                    href={link.href}
+                    class="text-sm text-slate-600 transition-colors hover:text-brand-700"
+                  >
+                    {link.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))
+      }
+    </div>
+
+    <div class="mt-12 border-t border-slate-200 pt-8">
+      <p class="max-w-4xl text-xs leading-6 text-slate-500">
+        TokGrid is an independent browser extension and is not affiliated with,
+        endorsed by, or sponsored by TikTok or ByteDance. TikTok and related marks
+        are trademarks of their respective owners.
+      </p>
+      <div
+        class="mt-4 flex flex-col justify-between gap-2 text-xs text-slate-500 sm:flex-row sm:items-center"
+      >
+        <p>© {year} TokGrid. All rights reserved.</p>
+        <p>Built for public TikTok pages you have opened and loaded.</p>
+      </div>
+    </div>
+  </div>
+</footer>

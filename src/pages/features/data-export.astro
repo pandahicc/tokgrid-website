@@ -1,0 +1,250 @@
+---
+import ArticleCard from '../../components/ArticleCard.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import CTA from '../../components/CTA.astro';
+import FAQ from '../../components/FAQ.astro';
+import Icon from '../../components/Icon.astro';
+import InstallButton from '../../components/InstallButton.astro';
+import ScreenshotSlot from '../../components/ScreenshotSlot.astro';
+import SectionHeading from '../../components/SectionHeading.astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { DATA_EXPORT_FAQS } from '../../data/faqs';
+import { getGuidesForFeature, getPublishedGuides } from '../../lib/content';
+import { breadcrumbSchema, faqSchema } from '../../lib/schema';
+
+const title = 'Export TikTok Research Data — TokGrid';
+const description =
+  'Export selected public TikTok video data as CSV or JSON with configurable fields. Product data export is also available on Pro.';
+
+const guides = await getPublishedGuides();
+const related = getGuidesForFeature('/features/data-export/', guides, 2);
+const jsonLd = [
+  breadcrumbSchema([
+    { name: 'Home', href: '/' },
+    { name: 'Features', href: '/features/' },
+    { name: 'Data Export', href: '/features/data-export/' },
+  ]),
+  faqSchema(DATA_EXPORT_FAQS),
+];
+
+const fieldGroups = [
+  ['Basic', 'Video ID, description, URL, published time, duration.'],
+  ['Engagement', 'Views, likes, comments, shares, saves, engagement rate, collect rate.'],
+  ['Author', 'Author ID, nickname, followers, total likes, bio, secUid.'],
+  ['Content', 'Hashtags, music title, original-music flag.'],
+  ['Product', 'Product count, IDs, titles, category paths, seller IDs, SKU counts.'],
+  ['Flags', 'Ad, commerce, EC-video, text language, subtitle languages.'],
+] as const;
+
+const limits = [
+  'Export is a Pro feature. Single-item copying and single video/subtitle downloads remain free.',
+  'Only selected videos in the current workflow are included. The extension does not merge data across pages, tabs, or browsing sessions.',
+  'Cross-page deduplicated merge and historical snapshots are not available in this version.',
+  'The export does not include sales, revenue, advertising spend, or platform-wide statistics.',
+  'CSV and JSON contain the fields available for each record. Missing values are blank in CSV and null where appropriate in JSON.',
+  'There is no Excel, Google Sheets, or other spreadsheet-service integration. You open or import the file yourself.',
+];
+---
+
+<BaseLayout title={title} description={description} canonicalPath="/features/data-export/" jsonLd={jsonLd}>
+  <section class="border-b border-slate-200 bg-slate-50">
+    <div class="container-page py-10 sm:py-14">
+      <Breadcrumbs
+        items={[
+          { name: 'Home', href: '/' },
+          { name: 'Features', href: '/features/' },
+          { name: 'Data Export', href: '/features/data-export/' },
+        ]}
+      />
+      <div class="mt-8 grid gap-10 lg:grid-cols-[1.05fr_0.95fr] lg:items-center">
+        <div>
+          <p class="text-xs font-bold uppercase tracking-[0.18em] text-brand-600">
+            Data export
+          </p>
+          <h1 class="mt-4 text-4xl font-bold tracking-tight text-slate-950 sm:text-5xl">
+            Export TikTok Research Data
+          </h1>
+          <p class="mt-5 max-w-2xl text-lg leading-8 text-slate-600">
+            Take the selected videos out of the page and into a CSV or JSON file with
+            configurable fields. Product data can be exported the same way on Pro.
+          </p>
+          <div class="mt-7 flex flex-col items-start gap-3 sm:flex-row sm:items-center">
+            <InstallButton campaign="feature-data-export" label="Install TokGrid" />
+            <a href="/guides/how-to-export-tiktok-video-data-to-csv/" class="text-sm font-semibold text-brand-700 hover:underline">
+              Read the CSV export guide
+            </a>
+          </div>
+        </div>
+        <ScreenshotSlot id="export" />
+      </div>
+    </div>
+  </section>
+
+  <section class="bg-white py-14 sm:py-20">
+    <div class="container-page">
+      <div class="grid gap-5 md:grid-cols-3">
+        {[
+          ['Selection is the source', 'The export uses the same selected-video set as batch download, so the file and the download queue refer to the same records.'],
+          ['Fields are configurable', 'Choose the fields you need in Settings. The same selection is used for both CSV and JSON.'],
+          ['Local file output', 'The extension writes the file locally. There is no upload step and no remote export service.'],
+        ].map(([heading, text]) => (
+          <div class="rounded-2xl border border-slate-200 bg-slate-50 p-6">
+            <h2 class="text-base font-bold text-slate-950">{heading}</h2>
+            <p class="mt-2 text-sm leading-6 text-slate-600">{text}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="border-y border-slate-200 bg-white py-14 sm:py-20">
+    <div class="container-page">
+      <SectionHeading
+        eyebrow="Field reference"
+        title="Choose the columns that match your question."
+        description="Available fields are grouped in Settings. The same field configuration is used for CSV and JSON."
+      />
+      <div class="mt-8 overflow-x-auto rounded-2xl border border-slate-200">
+        <table class="w-full border-collapse text-left text-sm">
+          <caption class="sr-only">Export field groups</caption>
+          <thead class="bg-slate-50">
+            <tr>
+              <th scope="col" class="px-3 py-3 sm:px-5 sm:py-3.5 font-bold text-slate-900">Group</th>
+              <th scope="col" class="px-3 py-3 sm:px-5 sm:py-3.5 font-bold text-slate-900">Fields</th>
+            </tr>
+          </thead>
+          <tbody>
+            {fieldGroups.map(([group, fields]) => (
+              <tr class="border-t border-slate-100">
+                <th scope="row" class="px-3 py-3 sm:px-5 sm:py-3.5 font-semibold text-slate-800">{group}</th>
+                <td class="px-3 py-3 sm:px-5 sm:py-3.5 text-slate-600">{fields}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <p class="mt-4 text-xs leading-5 text-slate-500">
+        Product export includes product ID, title, category path, seller ID, SKU count,
+        price, currency, source, cover URL, SEO URL, linked video IDs, and occurrence
+        count.
+      </p>
+    </div>
+  </section>
+
+  <section class="bg-slate-50 py-14 sm:py-20">
+    <div class="container-page">
+      <div class="grid gap-10 lg:grid-cols-[1fr_1fr] lg:items-start">
+        <div>
+          <SectionHeading
+            eyebrow="What is included"
+            title="The selected set, not the whole platform."
+            description="TokGrid exports the records you selected from the current filtered candidates, plus selections retained across filter changes."
+          />
+          <ul class="mt-6 space-y-3 text-sm leading-6 text-slate-600">
+            <li class="flex gap-3"><Icon name="check" class="mt-1 h-4 w-4 shrink-0 text-brand-600" />Select individual videos, all current filtered candidates, or a retained cross-filter selection.</li>
+            <li class="flex gap-3"><Icon name="check" class="mt-1 h-4 w-4 shrink-0 text-brand-600" />Exports from the Data tab or preview use the same selected-video set as batch download.</li>
+            <li class="flex gap-3"><Icon name="check" class="mt-1 h-4 w-4 shrink-0 text-brand-600" />Product data export uses the loaded, deduplicated product list.</li>
+            <li class="flex gap-3"><Icon name="check" class="mt-1 h-4 w-4 shrink-0 text-brand-600" />No cross-page merge, historical snapshot, or trend calculation is applied.</li>
+          </ul>
+        </div>
+        <div class="rounded-2xl border border-slate-200 bg-white p-6">
+          <h2 class="text-base font-bold text-slate-950">CSV vs JSON</h2>
+          <dl class="mt-4 space-y-4 text-sm leading-6 text-slate-600">
+            <div>
+              <dt class="font-semibold text-slate-900">CSV</dt>
+              <dd class="mt-1">A flat table with a header row, UTF-8 BOM, and CRLF rows for spreadsheet compatibility. Quoted cells handle commas and line breaks.</dd>
+            </div>
+            <div>
+              <dt class="font-semibold text-slate-900">JSON</dt>
+              <dd class="mt-1">An array of objects using stable field names. Useful for scripts, notebooks, or your own database import.</dd>
+            </div>
+            <div>
+              <dt class="font-semibold text-slate-900">Missing values</dt>
+              <dd class="mt-1">Missing values are not invented. CSV leaves them blank; JSON uses null where the field has no value.</dd>
+            </div>
+          </dl>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="border-y border-slate-200 bg-white py-14 sm:py-20">
+    <div class="container-page">
+      <div class="grid gap-10 lg:grid-cols-[0.85fr_1.15fr] lg:items-start">
+        <SectionHeading
+          eyebrow="Workflow"
+          title="A clean export in five steps."
+          description="Build the selection first, then decide on fields and format."
+        />
+        <ol class="space-y-4">
+          {[
+            ['Define the sample', 'Use the page and filters that match your research question. Record the page URL and date separately.'],
+            ['Select the records', 'Select individual videos or all current filtered candidates. Retained selections survive filter changes.'],
+            ['Configure fields', 'Open Settings and choose the export fields. The configuration applies to both CSV and JSON.'],
+            ['Choose format and export', 'Export CSV for a spreadsheet or JSON for code. The file is generated locally from the selected records.'],
+            ['Document the source', 'Keep the page URL, capture date, and filter settings with the file so the sample can be explained later.'],
+          ].map(([step, text], index) => (
+            <li class="flex gap-4 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+              <span class="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-brand-600 text-sm font-bold text-white">
+                {index + 1}
+              </span>
+              <div>
+                <h3 class="text-sm font-bold text-slate-950">{step}</h3>
+                <p class="mt-1.5 text-sm leading-6 text-slate-600">{text}</p>
+              </div>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  <section class="bg-white py-14 sm:py-20">
+    <div class="container-page">
+      <SectionHeading eyebrow="Limits" title="What export does not do." />
+      <div class="mt-8 grid gap-4 md:grid-cols-2">
+        {limits.map((limit) => (
+          <div class="flex gap-3 rounded-xl border border-slate-200 bg-slate-50 p-4 text-sm leading-6 text-slate-600">
+            <Icon name="alert" class="mt-0.5 h-4 w-4 shrink-0 text-signal-500" />
+            <p>{limit}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="border-y border-slate-200 bg-slate-50 py-14 sm:py-20">
+    <div class="container-page">
+      <SectionHeading eyebrow="FAQ" title="Data export questions." align="center" />
+      <div class="mx-auto mt-8 max-w-4xl">
+        <FAQ items={DATA_EXPORT_FAQS} />
+      </div>
+    </div>
+  </section>
+
+  {
+    related.length > 0 && (
+      <section class="bg-white py-14 sm:py-20">
+        <div class="container-page">
+          <div class="flex flex-wrap items-end justify-between gap-4">
+            <SectionHeading eyebrow="Guides" title="Go deeper" />
+            <a href="/guides/" class="inline-flex items-center gap-1.5 text-sm font-semibold text-brand-700 hover:text-brand-800">
+              All guides <Icon name="arrow" class="h-4 w-4" />
+            </a>
+          </div>
+          <div class="mt-8 grid gap-5 md:grid-cols-2">
+            {related.map((guide) => <ArticleCard entry={guide} />)}
+          </div>
+        </div>
+      </section>
+    )
+  }
+
+  <CTA
+    campaign="feature-data-export-final"
+    title="Turn the selected sample into a file you can explain."
+    description="Install TokGrid, build a selection on a supported public page, and use Pro export when you need CSV or JSON."
+    secondaryHref="/guides/how-to-export-tiktok-video-data-to-csv/"
+    secondaryLabel="How to export video data to CSV"
+  />
+</BaseLayout>

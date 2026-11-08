@@ -1,0 +1,65 @@
+---
+import { storeUrl } from '../data/site';
+import Icon from './Icon.astro';
+
+interface Props {
+  campaign?: string;
+  label?: string;
+  variant?: 'primary' | 'secondary' | 'ghost' | 'inverse';
+  size?: 'sm' | 'md' | 'lg';
+  showNote?: boolean;
+  className?: string;
+}
+
+const {
+  campaign = 'website',
+  label = 'Add to Chrome',
+  variant = 'primary',
+  size = 'md',
+  showNote = false,
+  className = '',
+} = Astro.props;
+
+const variants: Record<string, string> = {
+  primary:
+    'bg-brand-600 text-white shadow-sm hover:bg-brand-700 focus-visible:outline-brand-700',
+  secondary:
+    'border border-slate-200 bg-white text-slate-900 shadow-sm hover:border-brand-300 hover:bg-brand-50',
+  ghost: 'text-brand-700 hover:bg-brand-50',
+  inverse:
+    'bg-white text-slate-950 shadow-sm hover:bg-brand-50 focus-visible:outline-white',
+};
+
+const sizes: Record<string, string> = {
+  sm: 'px-3.5 py-2 text-sm',
+  md: 'px-5 py-2.5 text-sm',
+  lg: 'px-6 py-3 text-base',
+};
+
+const href = storeUrl(campaign);
+---
+
+<span class="inline-flex flex-col items-start gap-1.5">
+  <a
+    href={href}
+    target="_blank"
+    rel="noopener noreferrer"
+    class:list={[
+      'inline-flex items-center justify-center gap-2 rounded-full font-semibold transition-colors',
+      variants[variant],
+      sizes[size],
+      className,
+    ]}
+  >
+    {label}
+    <Icon name="external" class="h-4 w-4" />
+    <span class="sr-only">(opens in a new tab)</span>
+  </a>
+  {
+    showNote && (
+      <span class="text-xs leading-5 text-slate-500">
+        Free core features. Pro for batch downloads and exports.
+      </span>
+    )
+  }
+</span>

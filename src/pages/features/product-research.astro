@@ -1,0 +1,240 @@
+---
+import ArticleCard from '../../components/ArticleCard.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import CTA from '../../components/CTA.astro';
+import FAQ from '../../components/FAQ.astro';
+import Icon from '../../components/Icon.astro';
+import InstallButton from '../../components/InstallButton.astro';
+import ScreenshotSlot from '../../components/ScreenshotSlot.astro';
+import SectionHeading from '../../components/SectionHeading.astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { PRODUCT_RESEARCH_FAQS } from '../../data/faqs';
+import { getGuidesForFeature, getPublishedGuides } from '../../lib/content';
+import { breadcrumbSchema, faqSchema } from '../../lib/schema';
+
+const title = 'TikTok Product Research — TokGrid';
+const description =
+  'Organize product anchors from public TikTok pages into structured cards with category paths, seller IDs, SKU counts, and product IDs.';
+
+const guides = await getPublishedGuides();
+const related = getGuidesForFeature('/features/product-research/', guides, 2);
+const jsonLd = [
+  breadcrumbSchema([
+    { name: 'Home', href: '/' },
+    { name: 'Features', href: '/features/' },
+    { name: 'Product Research', href: '/features/product-research/' },
+  ]),
+  faqSchema(PRODUCT_RESEARCH_FAQS),
+];
+
+const fields = [
+  ['Product title', 'The title exposed by the product anchor.'],
+  ['Category path', 'A path built from the available category levels; it may be shorter than three levels or empty.'],
+  ['Seller ID', 'The seller identifier attached to the product record.'],
+  ['SKU count', 'The number of SKUs exposed for the product, when available.'],
+  ['Product ID', 'The identifier used to copy or look up the product.'],
+  ['SEO link', 'A product link when the page exposes one.'],
+  ['Cover and gallery', 'The product cover and, in the detail dialog, a deduplicated gallery.'],
+  ['Price', 'A page-displayed value only. Zero and empty values are not reliable price signals.'],
+] as const;
+
+const limits = [
+  'Only product data already present in the public page is available. This is not a TikTok Shop database.',
+  'Category paths and SKU counts can be incomplete. Missing levels are counted separately from valid categories.',
+  'Price is a page-displayed value and may be zero, stale, or empty. It is not a verified commercial price.',
+  'The extension does not estimate sales, revenue, advertising performance, seller distribution, or profit.',
+  'Category distribution uses the loaded, deduplicated products in the Products tab. It does not represent the whole platform.',
+  'Not every video has product anchors, and not every anchor includes every field.',
+];
+---
+
+<BaseLayout title={title} description={description} canonicalPath="/features/product-research/" jsonLd={jsonLd}>
+  <section class="border-b border-slate-200 bg-slate-50">
+    <div class="container-page py-10 sm:py-14">
+      <Breadcrumbs
+        items={[
+          { name: 'Home', href: '/' },
+          { name: 'Features', href: '/features/' },
+          { name: 'Product Research', href: '/features/product-research/' },
+        ]}
+      />
+      <div class="mt-8 grid gap-10 lg:grid-cols-[1.05fr_0.95fr] lg:items-center">
+        <div>
+          <p class="text-xs font-bold uppercase tracking-[0.18em] text-brand-600">
+            Product research
+          </p>
+          <h1 class="mt-4 text-4xl font-bold tracking-tight text-slate-950 sm:text-5xl">
+            TikTok Product Research
+          </h1>
+          <p class="mt-5 max-w-2xl text-lg leading-8 text-slate-600">
+            See the product anchors attached to the public videos you are already
+            reviewing. Organize category paths, seller IDs, SKU counts, and product IDs
+            without switching to a separate database.
+          </p>
+          <div class="mt-7 flex flex-col items-start gap-3 sm:flex-row sm:items-center">
+            <InstallButton campaign="feature-product-research" label="Install TokGrid" />
+            <a href="/guides/how-to-find-tiktok-products-by-category/" class="text-sm font-semibold text-brand-700 hover:underline">
+              Read the product research guide
+            </a>
+          </div>
+        </div>
+        <ScreenshotSlot id="products" />
+      </div>
+    </div>
+  </section>
+
+  <section class="bg-white py-14 sm:py-20">
+    <div class="container-page">
+      <div class="grid gap-5 md:grid-cols-3">
+        {[
+          ['Product cards', 'A structured card appears when a video exposes product anchors, with the available title, category, seller, SKU, and cover fields.'],
+          ['Deduplicated list', 'The Products tab combines repeated appearances so you can review the loaded products rather than every duplicate anchor.'],
+          ['Category distribution', 'Switch between first-, second-, and third-level categories to see how the loaded products are distributed.'],
+        ].map(([heading, text]) => (
+          <div class="rounded-2xl border border-slate-200 bg-slate-50 p-6">
+            <h2 class="text-base font-bold text-slate-950">{heading}</h2>
+            <p class="mt-2 text-sm leading-6 text-slate-600">{text}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="border-y border-slate-200 bg-white py-14 sm:py-20">
+    <div class="container-page">
+      <SectionHeading
+        eyebrow="Available fields"
+        title="Structure from product anchors, not a catalog."
+        description="TokGrid organizes the fields the public page exposes. It does not fill gaps with estimates or external product data."
+      />
+      <div class="mt-8 overflow-x-auto rounded-2xl border border-slate-200">
+        <table class="w-full border-collapse text-left text-sm">
+          <caption class="sr-only">Product fields available in TokGrid</caption>
+          <thead class="bg-slate-50">
+            <tr>
+              <th scope="col" class="px-3 py-3 sm:px-5 sm:py-3.5 font-bold text-slate-900">Field</th>
+              <th scope="col" class="px-3 py-3 sm:px-5 sm:py-3.5 font-bold text-slate-900">What it represents</th>
+            </tr>
+          </thead>
+          <tbody>
+            {fields.map(([field, meaning]) => (
+              <tr class="border-t border-slate-100">
+                <th scope="row" class="px-3 py-3 sm:px-5 sm:py-3.5 font-semibold text-slate-800">{field}</th>
+                <td class="px-3 py-3 sm:px-5 sm:py-3.5 text-slate-600">{meaning}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <p class="mt-4 text-xs leading-5 text-slate-500">
+        The product detail dialog can show a gallery and linked videos. Single-item
+        copying is free; product CSV/JSON export is a Pro feature.
+      </p>
+    </div>
+  </section>
+
+  <section class="bg-slate-50 py-14 sm:py-20">
+    <div class="container-page">
+      <div class="grid gap-10 lg:grid-cols-[1fr_1fr] lg:items-center">
+        <div>
+          <SectionHeading
+            eyebrow="Category distribution"
+            title="See how the loaded products cluster."
+            description="The distribution view uses the Products tab’s loaded, deduplicated products. It is a view of the sample, not a market-size estimate."
+          />
+          <ul class="mt-6 space-y-3 text-sm leading-6 text-slate-600">
+            <li class="flex gap-3"><Icon name="check" class="mt-1 h-4 w-4 shrink-0 text-brand-600" />Switch between first-, second-, and third-level categories.</li>
+            <li class="flex gap-3"><Icon name="check" class="mt-1 h-4 w-4 shrink-0 text-brand-600" />Uncategorized products and products with too few levels are counted separately.</li>
+            <li class="flex gap-3"><Icon name="check" class="mt-1 h-4 w-4 shrink-0 text-brand-600" />Percentages use valid products at the selected level as the denominator.</li>
+            <li class="flex gap-3"><Icon name="check" class="mt-1 h-4 w-4 shrink-0 text-brand-600" />Category counts describe loaded products, not sales, revenue, or profit.</li>
+          </ul>
+        </div>
+        <ScreenshotSlot id="categories" />
+      </div>
+    </div>
+  </section>
+
+  <section class="border-y border-slate-200 bg-white py-14 sm:py-20">
+    <div class="container-page">
+      <div class="grid gap-10 lg:grid-cols-[0.85fr_1.15fr] lg:items-start">
+        <SectionHeading
+          eyebrow="Workflow"
+          title="From a video to a product shortlist."
+          description="A practical way to use the Products tab during product discovery."
+        />
+        <ol class="space-y-4">
+          {[
+            ['Open a public page with product anchors', 'A video detail page, profile, search result, or other supported public page can expose product data.'],
+            ['Review the Products tab', 'Scan titles, category paths, seller IDs, and SKU counts; open a product for its gallery and linked videos.'],
+            ['Copy the identifiers you need', 'Copy product ID, seller ID, or the SEO link. Copy-all is available for the loaded product IDs.'],
+            ['Inspect the category distribution', 'Switch category levels and note how many loaded products are uncategorized or missing a level.'],
+            ['Export for further work', 'On Pro, export the product data as CSV or JSON for a spreadsheet or script.'],
+          ].map(([step, text], index) => (
+            <li class="flex gap-4 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+              <span class="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-brand-600 text-sm font-bold text-white">
+                {index + 1}
+              </span>
+              <div>
+                <h3 class="text-sm font-bold text-slate-950">{step}</h3>
+                <p class="mt-1.5 text-sm leading-6 text-slate-600">{text}</p>
+              </div>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  <section class="bg-white py-14 sm:py-20">
+    <div class="container-page">
+      <SectionHeading
+        eyebrow="Limits"
+        title="What product research cannot tell you."
+        description="These limits matter when you compare products or brief a buying team."
+      />
+      <div class="mt-8 grid gap-4 md:grid-cols-2">
+        {limits.map((limit) => (
+          <div class="flex gap-3 rounded-xl border border-slate-200 bg-slate-50 p-4 text-sm leading-6 text-slate-600">
+            <Icon name="alert" class="mt-0.5 h-4 w-4 shrink-0 text-signal-500" />
+            <p>{limit}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="border-y border-slate-200 bg-slate-50 py-14 sm:py-20">
+    <div class="container-page">
+      <SectionHeading eyebrow="FAQ" title="Product research questions." align="center" />
+      <div class="mx-auto mt-8 max-w-4xl">
+        <FAQ items={PRODUCT_RESEARCH_FAQS} />
+      </div>
+    </div>
+  </section>
+
+  {
+    related.length > 0 && (
+      <section class="bg-white py-14 sm:py-20">
+        <div class="container-page">
+          <div class="flex flex-wrap items-end justify-between gap-4">
+            <SectionHeading eyebrow="Guides" title="Go deeper" />
+            <a href="/guides/" class="inline-flex items-center gap-1.5 text-sm font-semibold text-brand-700 hover:text-brand-800">
+              All guides <Icon name="arrow" class="h-4 w-4" />
+            </a>
+          </div>
+          <div class="mt-8 grid gap-5 md:grid-cols-2">
+            {related.map((guide) => <ArticleCard entry={guide} />)}
+          </div>
+        </div>
+      </section>
+    )
+  }
+
+  <CTA
+    campaign="feature-product-research-final"
+    title="Research the products attached to the content you are already reviewing."
+    description="Install TokGrid and open a supported public TikTok page. Product browsing and single-item copying are free."
+    secondaryHref="/guides/how-to-find-tiktok-products-by-category/"
+    secondaryLabel="How to find products by category"
+  />
+</BaseLayout>

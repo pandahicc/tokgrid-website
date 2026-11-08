@@ -1,0 +1,279 @@
+---
+import ArticleCard from '../../components/ArticleCard.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import CTA from '../../components/CTA.astro';
+import FAQ from '../../components/FAQ.astro';
+import Icon from '../../components/Icon.astro';
+import InstallButton from '../../components/InstallButton.astro';
+import ScreenshotSlot from '../../components/ScreenshotSlot.astro';
+import SectionHeading from '../../components/SectionHeading.astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { VIDEO_ANALYTICS_FAQS } from '../../data/faqs';
+import { getGuidesForFeature, getPublishedGuides } from '../../lib/content';
+import { breadcrumbSchema, faqSchema } from '../../lib/schema';
+
+const title = 'TikTok Video Analytics — TokGrid';
+const description =
+  'Review views, likes, comments, shares, saves, and calculated engagement rate for the public TikTok videos already loaded on the page.';
+
+const guides = await getPublishedGuides();
+const related = getGuidesForFeature('/features/video-analytics/', guides, 2);
+const jsonLd = [
+  breadcrumbSchema([
+    { name: 'Home', href: '/' },
+    { name: 'Features', href: '/features/' },
+    { name: 'Video Analytics', href: '/features/video-analytics/' },
+  ]),
+  faqSchema(VIDEO_ANALYTICS_FAQS),
+];
+
+const metrics = [
+  ['Views', 'Play count from the available page data.'],
+  ['Likes', 'Digg count where the page exposes it.'],
+  ['Comments', 'Comment count from the loaded video data.'],
+  ['Shares', 'Share count from the loaded video data.'],
+  ['Saves', 'Collect count where available.'],
+  ['Engagement rate', '(likes + comments + shares + saves) / views × 100.'],
+  ['Author context', 'Follower count, total likes, and the author’s median views on the current page when enough videos are available.'],
+  ['Content context', 'Published time, duration, language, hashtags, music, commerce/ad flags, and product anchors.'],
+] as const;
+
+const filters = [
+  ['Numeric ranges', 'Views, likes, comments, saves, and engagement rate.'],
+  ['Time and duration', 'Published date range and video duration range.'],
+  ['Media type', 'All, commerce, ad, or organic.'],
+  ['Keywords', 'Include or exclude text in the description or hashtags.'],
+  ['Category', 'Filter by a product category path when product data exists.'],
+  ['Quick actions', 'High engagement, last 7 days, and commerce-first.'],
+  ['Sorting', 'Views, likes, comments, shares, saves, engagement rate, published time, or duration.'],
+] as const;
+
+const limits = [
+  'The sample only contains cards the page has rendered. Auto-load is best-effort, not a complete-history guarantee.',
+  'Metrics are a page snapshot. TokGrid does not refresh counts in the background or generate historical trends.',
+  'The analytics are not platform-wide statistics and cannot be used to infer TikTok-wide performance.',
+  'Missing metric values are excluded from medians, rankings, and distributions. A partial interaction record can still produce an engagement rate; check the fields behind it.',
+  'Product and subtitle fields may be missing when the page does not expose them.',
+  'TokGrid does not estimate sales, revenue, virality, or commercial outcomes.',
+];
+---
+
+<BaseLayout title={title} description={description} canonicalPath="/features/video-analytics/" jsonLd={jsonLd}>
+  <section class="border-b border-slate-200 bg-slate-50">
+    <div class="container-page py-10 sm:py-14">
+      <Breadcrumbs
+        items={[
+          { name: 'Home', href: '/' },
+          { name: 'Features', href: '/features/' },
+          { name: 'Video Analytics', href: '/features/video-analytics/' },
+        ]}
+      />
+      <div class="mt-8 grid gap-10 lg:grid-cols-[1.05fr_0.95fr] lg:items-center">
+        <div>
+          <p class="text-xs font-bold uppercase tracking-[0.18em] text-brand-600">
+            Video analytics
+          </p>
+          <h1 class="mt-4 text-4xl font-bold tracking-tight text-slate-950 sm:text-5xl">
+            TikTok Video Analytics
+          </h1>
+          <p class="mt-5 max-w-2xl text-lg leading-8 text-slate-600">
+            Turn the public videos already loaded on a TikTok page into a filterable
+            list, then review performance, engagement, and content context without
+            leaving the browser.
+          </p>
+          <div class="mt-7 flex flex-col items-start gap-3 sm:flex-row sm:items-center">
+            <InstallButton campaign="feature-video-analytics" label="Install TokGrid" />
+            <a href="/guides/how-to-analyze-tiktok-video-performance/" class="text-sm font-semibold text-brand-700 hover:underline">
+              Read the performance guide
+            </a>
+          </div>
+        </div>
+        <ScreenshotSlot id="data-list" />
+      </div>
+    </div>
+  </section>
+
+  <section class="bg-white py-14 sm:py-20">
+    <div class="container-page">
+      <div class="grid gap-5 md:grid-cols-3">
+        {[
+          ['Sample overview', 'See how many videos are in the current filtered sample and how many records have a valid value for each metric.'],
+          ['Rankings and distribution', 'Use Top 10 rankings, a views-by-engagement scatter, publishing frequency, duration distribution, and engagement composition.'],
+          ['Page-level context', 'Review the values alongside author, product, commerce/ad, and content fields from the same page.'],
+        ].map(([heading, text]) => (
+          <div class="rounded-2xl border border-slate-200 bg-slate-50 p-6">
+            <h2 class="text-base font-bold text-slate-950">{heading}</h2>
+            <p class="mt-2 text-sm leading-6 text-slate-600">{text}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="border-y border-slate-200 bg-white py-14 sm:py-20">
+    <div class="container-page">
+      <SectionHeading
+        eyebrow="What you can review"
+        title="The metrics the page actually exposes."
+        description="TokGrid does not invent missing fields. If a video does not expose a value, it is shown as missing and excluded from calculations that need it."
+      />
+      <div class="mt-8 overflow-x-auto rounded-2xl border border-slate-200">
+        <table class="w-full border-collapse text-left text-sm">
+          <caption class="sr-only">Available video metrics and context fields</caption>
+          <thead class="bg-slate-50">
+            <tr>
+              <th scope="col" class="px-3 py-3 sm:px-5 sm:py-3.5 font-bold text-slate-900">Field</th>
+              <th scope="col" class="px-3 py-3 sm:px-5 sm:py-3.5 font-bold text-slate-900">What it means</th>
+            </tr>
+          </thead>
+          <tbody>
+            {metrics.map(([field, meaning]) => (
+              <tr class="border-t border-slate-100">
+                <th scope="row" class="px-3 py-3 sm:px-5 sm:py-3.5 font-semibold text-slate-800">{field}</th>
+                <td class="px-3 py-3 sm:px-5 sm:py-3.5 text-slate-600">{meaning}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <p class="mt-4 text-xs leading-5 text-slate-500">
+        Engagement rate is a TokGrid calculation, not a TikTok official metric. When
+        views are zero or missing, no rate is shown.
+      </p>
+    </div>
+  </section>
+
+  <section class="bg-slate-50 py-14 sm:py-20">
+    <div class="container-page">
+      <div class="grid gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:items-start">
+        <SectionHeading
+          eyebrow="Filter and sort"
+          title="Narrow the sample before you interpret it."
+          description="Filters apply to the loaded list. A filtered sample is still a sample, not a new dataset from TikTok."
+        />
+        <div class="overflow-hidden rounded-2xl border border-slate-200 bg-white">
+          <table class="w-full border-collapse text-left text-sm">
+            <caption class="sr-only">Filter and sort options</caption>
+            <thead class="bg-slate-50">
+              <tr>
+                <th scope="col" class="px-3 py-3 sm:px-5 sm:py-3.5 font-bold text-slate-900">Control</th>
+                <th scope="col" class="px-3 py-3 sm:px-5 sm:py-3.5 font-bold text-slate-900">Options</th>
+              </tr>
+            </thead>
+            <tbody>
+              {filters.map(([control, options]) => (
+                <tr class="border-t border-slate-100">
+                  <th scope="row" class="px-3 py-3 sm:px-5 sm:py-3.5 font-semibold text-slate-800">{control}</th>
+                  <td class="px-3 py-3 sm:px-5 sm:py-3.5 text-slate-600">{options}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="bg-white py-14 sm:py-20">
+    <div class="container-page">
+      <div class="grid gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
+        <div>
+          <SectionHeading
+            eyebrow="Understand the sample"
+            title="Medians, coverage, and rankings you can explain."
+            description="The Stats tab separates the current sample from the platform. It shows how many records are included and how many had a usable value for each calculation."
+          />
+          <ul class="mt-6 space-y-3 text-sm leading-6 text-slate-600">
+            <li class="flex gap-3"><Icon name="check" class="mt-1 h-4 w-4 shrink-0 text-brand-600" />Median views and median engagement rate for the filtered sample.</li>
+            <li class="flex gap-3"><Icon name="check" class="mt-1 h-4 w-4 shrink-0 text-brand-600" />Valid coverage counts so a median is not mistaken for a complete data set.</li>
+            <li class="flex gap-3"><Icon name="check" class="mt-1 h-4 w-4 shrink-0 text-brand-600" />Top 10 by views, likes, saves, or engagement rate.</li>
+            <li class="flex gap-3"><Icon name="check" class="mt-1 h-4 w-4 shrink-0 text-brand-600" />Scatter view for videos with both valid views and engagement rate.</li>
+            <li class="flex gap-3"><Icon name="check" class="mt-1 h-4 w-4 shrink-0 text-brand-600" />Publishing frequency, duration distribution, and engagement composition.</li>
+          </ul>
+        </div>
+        <ScreenshotSlot id="analytics" />
+      </div>
+    </div>
+  </section>
+
+  <section class="border-y border-slate-200 bg-slate-50 py-14 sm:py-20">
+    <div class="container-page">
+      <div class="grid gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:items-start">
+        <SectionHeading
+          eyebrow="Auto-load"
+          title="Ask the page for more, without pretending it is complete."
+          description="On supported list pages, auto-load scrolls through the viewport to trigger the page’s own loading behavior. You can stop it at any time."
+        />
+        <div class="rounded-2xl border border-slate-200 bg-white p-6">
+          <ol class="space-y-4 text-sm leading-6 text-slate-600">
+            <li class="flex gap-3"><span class="font-bold text-brand-700">1.</span>Open a user profile, search, hashtag, Explore, or music-list page.</li>
+            <li class="flex gap-3"><span class="font-bold text-brand-700">2.</span>Start auto-load from the panel. It scrolls by viewport and lets the page load its own cards.</li>
+            <li class="flex gap-3"><span class="font-bold text-brand-700">3.</span>Stop manually, or let it stop when there are no new items, the page changes, the tab is hidden, a dialog opens, or a limit is reached.</li>
+            <li class="flex gap-3"><span class="font-bold text-brand-700">4.</span>Review the updated sample. It may increase page network and resource usage, and it does not guarantee a complete list.</li>
+          </ol>
+          <p class="mt-5 rounded-xl bg-slate-50 p-4 text-xs leading-5 text-slate-500">
+            Known caps: 30 attempts, 120 seconds, or 1,000 items. Login walls, rate limits,
+            and pages that stop returning new cards will end the run early.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="bg-white py-14 sm:py-20">
+    <div class="container-page">
+      <SectionHeading
+        eyebrow="Limits"
+        title="What this page cannot tell you."
+        description="Use these boundaries when you share findings with a team or client."
+      />
+      <div class="mt-8 grid gap-4 md:grid-cols-2">
+        {limits.map((limit) => (
+          <div class="flex gap-3 rounded-xl border border-slate-200 bg-slate-50 p-4 text-sm leading-6 text-slate-600">
+            <Icon name="alert" class="mt-0.5 h-4 w-4 shrink-0 text-signal-500" />
+            <p>{limit}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="border-y border-slate-200 bg-slate-50 py-14 sm:py-20">
+    <div class="container-page">
+      <SectionHeading
+        eyebrow="FAQ"
+        title="Video analytics questions."
+        align="center"
+      />
+      <div class="mx-auto mt-8 max-w-4xl">
+        <FAQ items={VIDEO_ANALYTICS_FAQS} />
+      </div>
+    </div>
+  </section>
+
+  {
+    related.length > 0 && (
+      <section class="bg-white py-14 sm:py-20">
+        <div class="container-page">
+          <div class="flex flex-wrap items-end justify-between gap-4">
+            <SectionHeading eyebrow="Guides" title="Go deeper" />
+            <a href="/guides/" class="inline-flex items-center gap-1.5 text-sm font-semibold text-brand-700 hover:text-brand-800">
+              All guides <Icon name="arrow" class="h-4 w-4" />
+            </a>
+          </div>
+          <div class="mt-8 grid gap-5 md:grid-cols-2">
+            {related.map((guide) => <ArticleCard entry={guide} />)}
+          </div>
+        </div>
+      </section>
+    )
+  }
+
+  <CTA
+    campaign="feature-video-analytics-final"
+    title="Review the sample on the page you are already viewing."
+    description="Install TokGrid and open a supported public TikTok page. Core analytics and filters are free."
+    secondaryHref="/guides/how-to-analyze-tiktok-video-performance/"
+    secondaryLabel="How to analyze video performance"
+  />
+</BaseLayout>

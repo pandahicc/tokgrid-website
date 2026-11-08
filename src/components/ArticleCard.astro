@@ -1,0 +1,61 @@
+---
+import type { Guide } from '../lib/content';
+import { formatDate, guidePath } from '../lib/content';
+import Icon from './Icon.astro';
+
+interface Props {
+  entry: Guide;
+  featured?: boolean;
+}
+
+const { entry, featured = false } = Astro.props;
+---
+
+<a
+  href={guidePath(entry)}
+  class:list={[
+    'group flex h-full flex-col rounded-2xl border border-slate-200 bg-white shadow-sm transition-all hover:-translate-y-0.5 hover:border-brand-300 hover:shadow-md',
+    featured ? 'p-7 sm:p-9' : 'p-6',
+  ]}
+>
+  <div class="flex flex-wrap items-center gap-2">
+    <span
+      class="rounded-full bg-brand-50 px-2.5 py-1 text-[0.7rem] font-bold uppercase tracking-[0.08em] text-brand-700"
+    >
+      {entry.data.category}
+    </span>
+    {entry.data.draft && (
+      <span class="rounded-full bg-amber-50 px-2.5 py-1 text-[0.7rem] font-bold uppercase tracking-[0.08em] text-amber-700">
+        Draft
+      </span>
+    )}
+  </div>
+  <h3
+    class:list={[
+      'mt-4 font-bold tracking-tight text-slate-950 group-hover:text-brand-700',
+      featured ? 'text-2xl sm:text-3xl' : 'text-xl',
+    ]}
+  >
+    {entry.data.title}
+  </h3>
+  <p
+    class:list={[
+      'mt-3 leading-7 text-slate-600',
+      featured ? 'text-base' : 'text-sm',
+    ]}
+  >
+    {entry.data.description}
+  </p>
+  <div
+    class="mt-auto flex flex-wrap items-center justify-between gap-3 border-t border-slate-100 pt-5 text-xs text-slate-500"
+  >
+    <span class="inline-flex items-center gap-1.5">
+      <Icon name="calendar" class="h-3.5 w-3.5" />
+      {formatDate(entry.data.pubDate)}
+    </span>
+    <span class="inline-flex items-center gap-1.5">
+      <Icon name="clock" class="h-3.5 w-3.5" />
+      {entry.data.readingTime} min read
+    </span>
+  </div>
+</a>

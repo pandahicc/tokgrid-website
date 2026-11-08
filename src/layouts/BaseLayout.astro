@@ -1,0 +1,61 @@
+---
+import '../styles/global.css';
+import Footer from '../components/Footer.astro';
+import GoogleAnalytics from '../components/GoogleAnalytics.astro';
+import Header from '../components/Header.astro';
+import SEO from '../components/SEO.astro';
+
+interface Props {
+  title: string;
+  description: string;
+  image?: string;
+  canonicalPath?: string;
+  noindex?: boolean;
+  type?: 'website' | 'article';
+  publishedTime?: string;
+  modifiedTime?: string;
+  jsonLd?: Array<Record<string, unknown>>;
+}
+
+const {
+  title,
+  description,
+  image,
+  canonicalPath,
+  noindex = false,
+  type = 'website',
+  publishedTime,
+  modifiedTime,
+  jsonLd,
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" type="image/png" sizes="48x48" href="/images/tokgrid-icon-48.png" />
+    <link rel="apple-touch-icon" href="/images/tokgrid-icon-128.png" />
+    <SEO
+      title={title}
+      description={description}
+      image={image}
+      canonicalPath={canonicalPath}
+      noindex={noindex}
+      type={type}
+      publishedTime={publishedTime}
+      modifiedTime={modifiedTime}
+      jsonLd={jsonLd}
+    />
+    <GoogleAnalytics />
+  </head>
+  <body class="min-h-screen bg-white">
+    <a href="#main" class="skip-link">Skip to content</a>
+    <Header />
+    <main id="main">
+      <slot />
+    </main>
+    <Footer />
+  </body>
+</html>

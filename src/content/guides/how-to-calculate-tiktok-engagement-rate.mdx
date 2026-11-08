@@ -1,0 +1,152 @@
+---
+title: How to Calculate TikTok Engagement Rate
+description: The exact engagement-rate formula TokGrid uses, how saves and missing values affect the result, and how to compare rates without misleading yourself.
+pubDate: 2026-11-08
+updatedDate: 2026-11-08
+readingTime: 6
+category: Video analytics
+featureHref: /features/video-analytics/
+featureLabel: TikTok Video Analytics
+related:
+  - how-to-analyze-tiktok-video-performance
+  - how-to-find-high-performing-tiktok-videos
+  - how-to-research-tiktok-competitors
+takeaways:
+  - TokGrid calculates engagement rate as (likes + comments + shares + saves) / views × 100.
+  - A zero or missing view count produces no rate, not a zero rate.
+  - A rate is shown only when views are valid and at least one interaction counter exists.
+  - A rate is only comparable when the sample, page type, and filter scope are comparable.
+---
+
+import ScreenshotSlot from '../../components/ScreenshotSlot.astro';
+import Callout from '../../components/Callout.astro';
+
+Engagement rate is one of the most quoted numbers in TikTok research and one of the easiest to calculate inconsistently. Different tools include different actions, handle missing fields differently, and compare different samples. If two reports use different formulas, a “higher” rate may not mean what it appears to mean.
+
+TokGrid uses one explicit formula for the videos it can read from a public page. This guide shows the calculation, the edge cases, and the comparison rules that keep the number useful.
+
+<Callout tone="note" title="The formula TokGrid uses">
+`engagement rate = (likes + comments + shares + saves) / views × 100`
+
+The result is a percentage. When views are zero or missing, no rate is shown. If all four interaction counters are missing, no rate is shown either.
+</Callout>
+
+## Why saves are included
+
+Likes are the most visible interaction, but they are not the only one. Comments require more effort. Shares move content to another audience. Saves suggest that someone wants to return to the video or use it later.
+
+TokGrid includes all four available interaction counts: likes, comments, shares, and saves. That makes the rate a broader interaction measure than a likes-only ratio. The calculation is also explicit about partial records: if all four counters are missing, no rate is shown; if at least one counter exists, the missing counters contribute zero to the sum.
+
+There is no universal TikTok engagement-rate definition. The important thing is to state the formula. “Engagement rate including saves, calculated from public page fields” is a claim someone can check. “Engagement rate” alone is ambiguous.
+
+## Worked examples
+
+### Example 1: A complete record
+
+A video has:
+
+- 20,000 views.
+- 900 likes.
+- 120 comments.
+- 80 shares.
+- 100 saves.
+
+Combined interactions: 900 + 120 + 80 + 100 = 1,200.
+
+Engagement rate: 1,200 / 20,000 × 100 = **6%**.
+
+### Example 2: Small reach, high rate
+
+A video has 2,000 views and 1,200 combined interactions.
+
+Engagement rate: 1,200 / 2,000 × 100 = **60%**.
+
+The rate is much higher, but the reach is much smaller. A 60% rate on 2,000 views is not automatically a stronger commercial signal than a 6% rate on 20,000 views. The scatter view in TokGrid exists partly to keep both dimensions visible.
+
+### Example 3: Zero views
+
+A video has zero views and 10 likes.
+
+The rate is **not shown**. Dividing by zero does not produce a meaningful percentage. TokGrid does not display an infinite or zero rate for this case.
+
+### Example 4: A partial record
+
+A video has views and likes, but the page does not expose comments, shares, or saves. At least one interaction counter exists, so TokGrid calculates the rate from likes and treats the missing counters as zero. The result is a partial-record rate: it can understate the video’s actual interaction. Check the available fields before comparing it with a complete record.
+
+## How missing counters are handled
+
+A missing counter is not the same as a real zero, but the calculation has to make a choice. TokGrid’s rule is:
+
+- **All four counters missing:** no engagement rate is shown.
+- **At least one counter present:** the available counters are summed, and the missing counters contribute zero.
+
+Suppose you have three videos:
+
+- Video A: 10,000 views, 500 likes, 50 comments, 20 shares, 30 saves.
+- Video B: 8,000 views, 300 likes, 20 comments, 10 shares, missing saves.
+- Video C: 12,000 views, 700 likes, 60 comments, 40 shares, 10 saves.
+
+Video B’s rate is calculated as if its missing saves were zero. That can understate the rate for a data-availability reason, not a performance reason. The Stats view excludes records whose engagement-rate value is null from medians and rankings, but it does not recompute a partial record as if the missing field were available. Treat partial records as a caveat, not as a complete measurement.
+
+## How TokGrid displays the rate
+
+The engagement rate can appear in several places:
+
+- The page overlay badge.
+- The data list.
+- The hover details.
+- The Stats tab median.
+- Top 10 rankings when engagement rate is the selected metric.
+- The scatter view when both views and rate are valid.
+
+The Stats view also shows coverage, so you can see how many records contributed to a median. That is important when the page exposes incomplete fields. A median without coverage can look more authoritative than it is.
+
+<ScreenshotSlot id="overlay" />
+
+## Comparing rates responsibly
+
+A rate is only one part of a comparison. Before calling one video or creator “more engaging,” check:
+
+1. **Same page type?** A profile sample and a hashtag sample are different populations.
+2. **Same filter scope?** “Last seven days” and “all loaded” are different questions.
+3. **Similar sample size?** A median from a handful of records is less stable.
+4. **Valid coverage?** Missing fields reduce the number of records behind the rate.
+5. **Reach context?** A high rate on tiny reach is a different finding from a high rate on large reach.
+6. **Time context?** Metrics are a page snapshot, not a live feed or a historical series.
+
+If you cannot state those conditions, the comparison is probably too strong.
+
+## Common mistakes
+
+- **Using likes only and calling it engagement rate.** It is a likes-to-views ratio, not the same measure.
+- **Dividing by zero.** A zero-view video has no meaningful rate.
+- **Forgetting partial-record behavior.** When at least one interaction counter exists, TokGrid treats missing counters as zero. That can understate a rate; check the record’s available fields.
+- **Comparing a single video with a page median.** One is a record; the other is a sample summary.
+- **Assuming the rate is official.** TokGrid calculates it from page fields; TikTok does not necessarily publish this exact metric.
+- **Assuming engagement means sales.** Interaction is not revenue or purchase intent.
+
+## What the rate cannot tell you
+
+Engagement rate does not tell you whether a video sold products, changed brand perception, reached a new audience, or will perform again. It does not measure watch time, retention, or audience quality. It also does not correct for the possibility that the page’s counts are stale or incomplete, or for a partial interaction record being treated with zero for the missing counters.
+
+TokGrid’s analytics are deliberately sample-first. If you need platform-wide benchmarks or historical trends, this calculation is not a substitute.
+
+## A short reporting template
+
+When you report an engagement-rate finding, include:
+
+- The formula used, including saves.
+- The page type and URL.
+- The capture date.
+- The filters applied.
+- The sample size.
+- The valid coverage for the metric.
+- The median rate and, where relevant, the range.
+- The reach context for standout videos.
+- The limits: sample-only, page snapshot, no sales inference.
+
+That template is unglamorous, but it makes the number reviewable. A reader can ask a precise question instead of trusting a bare percentage.
+
+## Where to go next
+
+Read [How to Analyze TikTok Video Performance](/guides/how-to-analyze-tiktok-video-performance/) for the full sample workflow, or [How to Find High-Performing TikTok Videos](/guides/how-to-find-high-performing-tiktok-videos/) for the ranking and scatter view. The [TikTok Video Analytics feature page](/features/video-analytics/) lists the available filters and metrics.
