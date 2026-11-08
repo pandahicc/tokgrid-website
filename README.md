@@ -17,7 +17,7 @@ data export.
 | Framework | Astro 7.4.7, static output |
 | Styling | Tailwind CSS 4.3.5 via `@tailwindcss/vite` |
 | Content | Astro Content Collections + MDX (`@astrojs/mdx` 8.1.3) |
-| Hosting | Cloudflare Pages (recommended), or any static host |
+| Hosting | Cloudflare Pages, Cloudflare Workers Builds, or any static host |
 | Client JS | No framework client JS; JSON-LD plus GA4 (production default) |
 | Analytics | GA4 enabled by default in production with `G-8SL1Y6HB4Q`; env override/disable |
 
@@ -59,7 +59,7 @@ public/
   images/screenshots/   Drop real captures here; slots replace placeholders on build
   og/                   Default 1200×630 Open Graph image
   robots.txt
-  _headers              Cloudflare Pages security/cache headers
+  _headers              Edge security/cache headers (Pages or Workers assets)
 docs/screenshot-guide.md
 scripts/check-site.mjs
 ```
@@ -159,7 +159,32 @@ requires opt-in consent before analytics loads.
 
 ## Deployment
 
-### Cloudflare Pages (recommended)
+### Cloudflare Workers Builds (the Workers UI with Deploy/Preview commands)
+
+If you connected the repository through **Workers & Pages → Create → Worker**, that
+flow asks for a build command plus deploy and preview commands. Use:
+
+| Field | Value |
+|---|---|
+| Build command | `npm run build` |
+| Deploy command | `npx --yes wrangler deploy` |
+| Preview command | `npx --yes wrangler preview` |
+| Root directory | leave blank |
+| Build variable | `NODE_VERSION=22.23.4` (or the latest 22.x) |
+| Optional GA override | `PUBLIC_GA_MEASUREMENT_ID=G-8SL1Y6HB4Q` |
+
+The repository includes `wrangler.jsonc`, which tells Wrangler to deploy the generated
+`dist/` directory as static assets, serve `404.html` for missing pages, and keep
+trailing-slash HTML behavior consistent with the Astro build. `public/_headers` is
+copied into `dist/` and is honored by Workers static assets.
+
+After the first deploy, add the custom domain under the Worker's **Settings → Domains &
+Routes** rather than the Pages custom-domain screen.
+
+If you want the simpler static-site flow, use the Pages section below instead — it does
+not require deploy or preview commands.
+
+### Cloudflare Pages
 
 1. Push this repository to GitHub.
 2. In Cloudflare Pages, create a project and connect the repository.

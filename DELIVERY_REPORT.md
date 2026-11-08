@@ -157,7 +157,7 @@ GA4 与真实截图接入后，Performance 为 92–99；Accessibility、Best Pr
 
 1. **Support URL / Privacy 法律主体信息**：邮箱已设置为 `pandahi.cc@gmail.com`；CWS Support URL 与必要的法律主体信息仍待补齐。
 2. **GA 同意/合规评估**：GA4 已默认启用并可能设置 `_ga` Cookie；当前没有 Cookie 同意横幅，面向 EEA/UK 等地区上线前需评估或禁用。
-3. **Cloudflare Pages / DNS 权限**：未执行部署，未修改 DNS。
+3. **Cloudflare Pages / Workers Builds / DNS 权限**：未执行部署，未修改 DNS。
 4. **Chrome Web Store Homepage/Support URL**：需上线后更新。
 5. **Search Console / Bing Webmaster Tools**：未提交。
 6. **Pro 价格展示**：已确认不在网站展示；网站只说明 Pro 为付费升级，具体方案在扩展内查看。
@@ -168,7 +168,7 @@ GA4 与真实截图接入后，Performance 为 92–99；Accessibility、Best Pr
 1. 复核已提供的 13 张截图是否符合发布要求；文件名、所在页面和图片含义见 `docs/screenshot-guide.md`。
 2. 在 Chrome Web Store 后台配置 Support URL；如需变更邮箱，更新 `src/data/site.ts`。
 3. GA4 已默认启用；如受众地区要求 opt-in，请在 Cloudflare Pages 增加同意机制，或用 `PUBLIC_GA_MEASUREMENT_ID=''` 禁用。
-4. 在 Cloudflare Pages 连接 GitHub，配置：
+4. 在 Cloudflare Pages 或 Workers Builds 连接 GitHub，按所选平台配置：
    - Framework preset: `Astro`
    - Build command: `npm run build`
    - Output directory: `dist`
@@ -189,7 +189,7 @@ GA4 与真实截图接入后，Performance 为 92–99；Accessibility、Best Pr
 - GitHub：已配置 SSH remote 并 push `main` 到 `https://github.com/pandahicc/tokgrid-website`
 - GitHub Actions：CI badge 显示 **passing**
 - GA4：生产构建已启用 `G-8SL1Y6HB4Q`
-- Cloudflare Pages / DNS：未执行
+- Cloudflare Pages/Workers / DNS：未执行（已提供 wrangler.jsonc）
 
 在完成 Cloudflare 项目创建、自定义域名绑定与 HTTPS 验证之前，不应对外声称网站已上线。
 
