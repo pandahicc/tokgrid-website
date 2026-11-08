@@ -21,7 +21,7 @@
   - `/features/bulk-download/`
   - `/features/data-export/`
 - Guides 索引 `/guides/`
-- 8 篇完整 MDX 文章（每篇约 900–1,300 词正文）：
+- 9 篇完整 MDX 文章（每篇约 900–1,300 词正文）：
   1. How to Analyze TikTok Video Performance
   2. How to Calculate TikTok Engagement Rate
   3. How to Find High-Performing TikTok Videos
@@ -30,20 +30,21 @@
   6. How to Export TikTok Video Data to CSV
   7. How to Analyze TikTok Creator Content
   8. How to Bulk Download TikTok Videos
+  9. How to Preview, Sort, and Filter TikTok Videos
 - Privacy `/privacy/`
 - Support `/support/`
 - About `/about/`
 - Changelog `/changelog/`
 - 404 `/404.html`
 - `sitemap.xml`、`robots.txt`、Cloudflare `_headers`
-- 12 个真实截图预留槽位（当前显示明确占位，放入图片后自动替换）
+- 13 张真实截图已接入（含 preview-sort-filters；均已转换为 WebP）
 - GA4 已启用（`G-8SL1Y6HB4Q`；生产默认；可置空禁用）
 - 联系邮箱已接入 Support、Privacy、Footer 和 FAQ
 - GitHub Actions CI（build + check，当前 passing）
 - 链接/SEO/JSON-LD/sitemap 自动检查脚本
 - 英文 README 与中文交付报告
 
-构建结果：**20 个 HTML 页面**，其中 **19 个可索引页面 + 404**。
+构建结果：**21 个 HTML 页面**，其中 **20 个可索引页面 + 404**。
 
 ## B. 技术实现
 
@@ -79,7 +80,7 @@
   - Guides 索引：`ItemList`
   - 文章：`Article` + `BreadcrumbList`
 - 未写虚假 `aggregateRating`、review、用户数、价格或销量。
-- `src/pages/sitemap.xml.ts` 生成 19 个 URL，Guides 含 `lastmod`。
+- `src/pages/sitemap.xml.ts` 生成 20 个 URL，Guides 含 `lastmod`。
 - `public/robots.txt` 允许抓取并指向 sitemap。
 - 文章与功能页内链、Header/Footer 导航、面包屑均已完成。
 - 未生成 `llms.txt`（不作为收录保证）。
@@ -90,7 +91,7 @@
 
 ```text
 npm run verify
-Site check passed: 20 HTML pages, 19 sitemap URLs.
+Site check passed: 21 HTML pages, 20 sitemap URLs.
 ```
 
 检查覆盖：
@@ -112,12 +113,13 @@ Site check passed: 20 HTML pages, 19 sitemap URLs.
 
 | 页面 | Performance | Accessibility | Best Practices | SEO |
 |---|---:|---:|---:|---:|
-| 首页 | 95 | 100 | 100 | 100 |
-| Guides 索引 | 98 | 100 | 100 | 100 |
-| 文章（Analyze TikTok Video Performance） | 92 | 100 | 100 | 100 |
-| Video Analytics 功能页 | 98 | 100 | 100 | 100 |
+| 首页 | 99 | 100 | 100 | 100 |
+| Guides 索引 | 92 | 100 | 100 | 100 |
+| 文章（Analyze TikTok Video Performance） | 99 | 100 | 100 | 100 |
+| Video Analytics 功能页 | 99 | 100 | 100 | 100 |
+| 新文章（Preview, Sort, and Filter） | 98 | 100 | 100 | 100 |
 
-GA4 启用后，第三方 `gtag.js` 会占用部分移动端性能预算，因此 Performance 从之前的 100 降至 92–98；Accessibility、Best Practices、SEO 仍为 100。文章页最初因 Markdown checklist 生成未标注的 disabled checkbox，Accessibility 为 94；已改为文本勾选框并保持 100。
+GA4 与真实截图接入后，Performance 为 92–99；Accessibility、Best Practices、SEO 仍为 100。Guides 索引最近一次为 92（此前 98），属于 Lighthouse 运行波动；其余页面为 98–99。文章页最初因 Markdown checklist 生成未标注的 disabled checkbox，Accessibility 为 94；已改为文本勾选框并保持 100。
 
 ### 响应式
 
@@ -125,11 +127,11 @@ GA4 启用后，第三方 `gtag.js` 会占用部分移动端性能预算，因�
 
 - 首页
 - Guides 索引
-- 文章
 - Video Analytics 功能页
+- 新文章（Preview, Sort, and Filter）
 - Privacy
 
-结果：**所有页面 `documentElement.scrollWidth <= innerWidth`，无页面级横向溢出**。移动端 Free/Pro 表已改为可换行布局，避免只看到第一列。
+结果：**所有页面 `documentElement.scrollWidth <= innerWidth`，无页面级横向溢出**。移动端 Free/Pro 表保持可换行布局，窄长截图通过 `screenshot-tall` 限制高度。
 
 ### GA4
 
@@ -138,11 +140,13 @@ GA4 启用后，第三方 `gtag.js` 会占用部分移动端性能预算，因�
 - 使用 `PUBLIC_GA_MEASUREMENT_ID='' npm run build` 验证禁用：产物无 GA 脚本，Privacy 显示 disabled，`npm run check` 通过；随后已恢复默认构建。
 - 未实现 Cookie 同意横幅；面向需要 opt-in 的地区上线前需补充同意机制或禁用 GA。
 
-### 截图槽自动替换
+### 真实截图接入
 
-- 临时放入 `data-list-filters.png` 后重新构建，首页渲染真实 `<img>`。
-- 删除测试图并重新构建，页面恢复占位。
-- 测试图未提交。
+- 13 张用户提供的截图原本是 PNG 字节但使用 `.webp` 扩展名；已全部转换为真正 WebP。
+- `src/data/screenshots.ts` 的 width/height 已同步为实际尺寸；新增 `preview-sort-filters`。
+- 浏览器检查：首页、4 个功能页、9 篇文章和 Privacy 中，所有 `<img>` 的 `naturalWidth > 0`，broken image 为 0，`data-placeholder` 为 0。
+- 窄长截图使用 `screenshot-tall` 居中并限制最大高度；首屏截图使用 `priority` 加快 LCP。
+- `.tmp-inspect`、`.tmp-shots` 等检查产物未提交。
 
 ### 外部链接
 
@@ -151,18 +155,17 @@ GA4 启用后，第三方 `gtag.js` 会占用部分移动端性能预算，因�
 
 ## E. 未完成事项
 
-1. **真实产品截图**：12 个槽位目前均为占位，需要真实扩展截图。
-2. **Support URL / Privacy 法律主体信息**：邮箱已设置为 `pandahi.cc@gmail.com`；CWS Support URL 与必要的法律主体信息仍待补齐。
-3. **GA 同意/合规评估**：GA4 已默认启用并可能设置 `_ga` Cookie；当前没有 Cookie 同意横幅，面向 EEA/UK 等地区上线前需评估或禁用。
-4. **Cloudflare Pages / DNS 权限**：未执行部署，未修改 DNS。
-5. **Chrome Web Store Homepage/Support URL**：需上线后更新。
-6. **Search Console / Bing Webmaster Tools**：未提交。
-7. **Pro 价格展示**：已确认不在网站展示；网站只说明 Pro 为付费升级，具体方案在扩展内查看。
-8. **法律/隐私审阅**：Privacy 已按当前代码事实编写，但正式上线前建议进行法律审阅。
+1. **Support URL / Privacy 法律主体信息**：邮箱已设置为 `pandahi.cc@gmail.com`；CWS Support URL 与必要的法律主体信息仍待补齐。
+2. **GA 同意/合规评估**：GA4 已默认启用并可能设置 `_ga` Cookie；当前没有 Cookie 同意横幅，面向 EEA/UK 等地区上线前需评估或禁用。
+3. **Cloudflare Pages / DNS 权限**：未执行部署，未修改 DNS。
+4. **Chrome Web Store Homepage/Support URL**：需上线后更新。
+5. **Search Console / Bing Webmaster Tools**：未提交。
+6. **Pro 价格展示**：已确认不在网站展示；网站只说明 Pro 为付费升级，具体方案在扩展内查看。
+7. **法律/隐私审阅**：Privacy 已按当前代码事实编写，但正式上线前建议进行法律审阅。
 
 ## F. 用户需要执行的操作
 
-1. 提供或放入 12 张真实插件截图到 `public/images/screenshots/`，文件名、所在页面和图片含义见 `docs/screenshot-guide.md`。
+1. 复核已提供的 13 张截图是否符合发布要求；文件名、所在页面和图片含义见 `docs/screenshot-guide.md`。
 2. 在 Chrome Web Store 后台配置 Support URL；如需变更邮箱，更新 `src/data/site.ts`。
 3. GA4 已默认启用；如受众地区要求 opt-in，请在 Cloudflare Pages 增加同意机制，或用 `PUBLIC_GA_MEASUREMENT_ID=''` 禁用。
 4. 在 Cloudflare Pages 连接 GitHub，配置：
@@ -180,7 +183,7 @@ GA4 启用后，第三方 `gtag.js` 会占用部分移动端性能预算，因�
 **未部署，未上线。**
 
 - 本地生产构建已通过，产物目录：`dist/`
-- 页面数：20 HTML；sitemap：19 URL
+- 页面数：21 HTML；sitemap：20 URL
 - Chrome Web Store 链接：可访问（核验时 HTTP 200）
 - `https://tokgrid.app/`：当前 TLS/服务不可用
 - GitHub：已配置 SSH remote 并 push `main` 到 `https://github.com/pandahicc/tokgrid-website`
@@ -199,6 +202,6 @@ GA4 启用后，第三方 `gtag.js` 会占用部分移动端性能预算，因�
 - `.env.example` — GA4 默认 ID 与覆盖/禁用说明
 - `.github/workflows/ci.yml` — GitHub Actions CI
 - `scripts/check-site.mjs` — 构建产物检查
-- `src/content/guides/*.mdx` — 8 篇博客文章
+- `src/content/guides/*.mdx` — 9 篇博客文章
 - `src/data/screenshots.ts` — 截图槽注册表
 - `src/data/site.ts` — 站点、导航、CWS 链接与 UTM

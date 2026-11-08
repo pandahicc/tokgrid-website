@@ -219,14 +219,16 @@ for (const file of htmlFiles) {
   }
 }
 
+let sitemapCount = 0;
 const sitemapPath = path.join(DIST, 'sitemap.xml');
 if (!existsSync(sitemapPath)) {
   errors.push('dist/sitemap.xml is missing');
 } else {
   const sitemap = await readFile(sitemapPath, 'utf8');
   const locs = [...sitemap.matchAll(/<loc>(.*?)<\/loc>/g)].map((match) => match[1]);
-  if (locs.length !== 19) {
-    errors.push(`sitemap has ${locs.length} URLs; expected 19`);
+  sitemapCount = locs.length;
+  if (locs.length !== 20) {
+    errors.push(`sitemap has ${locs.length} URLs; expected 20`);
   }
   for (const loc of locs) {
     if (!loc.startsWith(BASE)) {
@@ -258,7 +260,7 @@ if (errors.length > 0) {
   for (const error of errors) console.error(`  - ${error}`);
   process.exitCode = 1;
 } else {
-  console.log(`Site check passed: ${htmlFiles.length} HTML pages, 19 sitemap URLs.`);
+  console.log(`Site check passed: ${htmlFiles.length} HTML pages, ${sitemapCount} sitemap URLs.`);
   if (GA_ENABLED) {
     console.log(`GA4 is enabled for this build (${GA_ID}); GA scripts were allowed.`);
   } else {

@@ -47,7 +47,7 @@ npm install --cache /tmp/npm-cache
 ```text
 src/
   components/           Shared UI (header, footer, CTA, FAQ, SEO, screenshot slot, GA)
-  content/guides/       8 MDX guides
+  content/guides/       9 MDX guides
   content.config.ts     Guides collection schema
   data/                 Site config, FAQ copy, screenshot registry
   layouts/              BaseLayout and ArticleLayout
@@ -116,7 +116,8 @@ npm run build
 ```
 
 Screenshots must be real captures of the current extension, with personal data removed.
-Recommended size: 1280×800 or 1600×1000.
+Use the native dimensions of the capture. Keep `width` and `height` in
+`src/data/screenshots.ts` in sync if you replace an image.
 
 ## Google Analytics
 
@@ -195,7 +196,7 @@ refactor is added.
 
 ## Testing
 
-- `npm run verify` builds and checks all 20 HTML pages, metadata, JSON-LD, internal
+- `npm run verify` builds and checks all 21 HTML pages, metadata, JSON-LD, internal
   links, assets, sitemap URLs, and robots.
 - Manual responsive checks use Chrome at 390, 768, and 1440 widths.
 - Lighthouse results and current deployment status are recorded in
@@ -218,7 +219,7 @@ does not include page data. See `/privacy/` for the precise distinction.
 
 ## Pending inputs
 
-- Real product screenshots (see `docs/screenshot-guide.md`).
+- Review or replace the supplied screenshots if needed; see `docs/screenshot-guide.md`.
 - Chrome Web Store Support URL (email is set to `pandahi.cc@gmail.com`).
 - GitHub remote URL and credentials.
 - Cloudflare Pages/DNS access.
@@ -229,5 +230,4 @@ does not include page data. See `/privacy/` for the precise distinction.
 Subscription pricing is intentionally not displayed. The product-price field described
 on the Product Research page is a data field, not a subscription price.
 
-Until the remaining inputs are supplied, the site uses labelled screenshot placeholders
-and does not claim to be deployed.
+Until the remaining inputs are supplied, the site does not claim to be deployed.

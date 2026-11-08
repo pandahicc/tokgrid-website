@@ -7,9 +7,10 @@ interface Props {
   id: ScreenshotId;
   caption?: string;
   className?: string;
+  priority?: boolean;
 }
 
-const { id, caption, className = '' } = Astro.props;
+const { id, caption, className = '', priority = false } = Astro.props;
 const definition = SCREENSHOTS[id];
 
 if (!definition) {
@@ -18,6 +19,7 @@ if (!definition) {
   );
 }
 
+const isTall = definition.height > definition.width;
 const publicRoot = join(process.cwd(), 'public');
 const extensions = ['webp', 'avif', 'png', 'jpg', 'jpeg'];
 const relativeBase = definition.base.replace(/^\//, '');
@@ -33,20 +35,25 @@ const match = extensions
 
 {
   match ? (
-    <figure class:list={['screenshot-figure', className]}>
+    <figure class:list={['screenshot-figure', isTall && 'screenshot-tall', className]}>
       <img
         src={match}
         alt={definition.alt}
         width={definition.width}
         height={definition.height}
-        loading="lazy"
+        loading={priority ? 'eager' : 'lazy'}
+        fetchpriority={priority ? 'high' : 'auto'}
         decoding="async"
       />
       <figcaption>{caption ?? definition.description}</figcaption>
     </figure>
   ) : (
     <figure
-      class:list={['screenshot-placeholder', className]}
+      class:list={[
+        'screenshot-placeholder',
+        isTall && 'screenshot-tall',
+        className,
+      ]}
       data-placeholder="screenshot"
       data-expected={`${definition.base}.webp`}
     >
