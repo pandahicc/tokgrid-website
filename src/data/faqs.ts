@@ -10,7 +10,7 @@ export const HOME_FAQS: FaqItem[] = [
   },
   {
     q: 'Is TokGrid free?',
-    a: 'Core features are free, including the page overlay, data list, filters, sample analytics, product browsing, single video download, and single subtitle download. Pro adds batch downloads, selected-video CSV/JSON export, and product data export. Pricing is shown in the extension’s subscription flow.',
+    a: 'Core features are free, including the page overlay, data list, filters, sample analytics, product browsing, single video download, and single subtitle download. Pro adds batch downloads, selected-video CSV/JSON export, and product data export. Pro is a paid upgrade; current plan details are available in the extension.',
   },
   {
     q: 'Does TokGrid require an account?',
@@ -169,6 +169,6 @@ export const SUPPORT_FAQS: FaqItem[] = [
   },
   {
     q: 'Where can I get help?',
-    a: 'A public support contact is being finalized. Until it is published, use the support link on the Chrome Web Store listing. Do not send page data or account credentials in a support request.',
+    a: 'Email pandahi.cc@gmail.com for support or privacy questions. Do not send page data, account credentials, or subscription tokens in a support request.',
   },
 ];

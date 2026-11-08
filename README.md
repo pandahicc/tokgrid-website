@@ -8,6 +8,7 @@ data export.
 - Chrome Web Store: [TokGrid — Video Analytics & Downloader](https://chromewebstore.google.com/detail/tokgrid-%E2%80%94-video-analytics/cilbojljfiabbejnafhjlkofbanoflcl)
 - Content language: English
 - Current extension version referenced by the site: `0.1.2`
+- Support and privacy email: `pandahi.cc@gmail.com`
 
 ## Stack
 
@@ -17,8 +18,8 @@ data export.
 | Styling | Tailwind CSS 4.3.5 via `@tailwindcss/vite` |
 | Content | Astro Content Collections + MDX (`@astrojs/mdx` 8.1.3) |
 | Hosting | Cloudflare Pages (recommended), or any static host |
-| Client JS | None by default; only JSON-LD, plus optional GA4 when configured |
-| Analytics | None by default; GA4 code reserved behind `PUBLIC_GA_MEASUREMENT_ID` |
+| Client JS | No framework client JS; JSON-LD plus GA4 (production default) |
+| Analytics | GA4 enabled by default in production with `G-8SL1Y6HB4Q`; env override/disable |
 
 The site has no backend, database, CMS, user accounts, or contact form.
 
@@ -117,26 +118,32 @@ npm run build
 Screenshots must be real captures of the current extension, with personal data removed.
 Recommended size: 1280×800 or 1600×1000.
 
-## Google Analytics (reserved, off by default)
+## Google Analytics
 
-The GA4 tag is rendered only when `PUBLIC_GA_MEASUREMENT_ID` is set at build time.
+Production builds load Google Analytics 4 with measurement ID **`G-8SL1Y6HB4Q`** by
+default. Development builds do not load GA unless a measurement ID is provided.
+
+To override or disable:
 
 ```bash
-cp .env.example .env
-# edit .env:
-# PUBLIC_GA_MEASUREMENT_ID=G-XXXXXXXXXX
-npm run build
+# Override with another property
+PUBLIC_GA_MEASUREMENT_ID=G-XXXXXXXXXX npm run build
+
+# Disable for a build
+PUBLIC_GA_MEASUREMENT_ID='' npm run build
 ```
 
 When enabled:
 
 - `GoogleAnalytics.astro` adds the `gtag.js` script and inline configuration.
-- The Privacy page switches to the “analytics enabled” wording.
-- `scripts/check-site.mjs` allows the GA scripts; otherwise it rejects client scripts
-  that are not JSON-LD.
+- The Privacy page renders the “analytics enabled” section and mentions GA cookies.
+- `scripts/check-site.mjs` allows the GA scripts; when explicitly disabled, it rejects
+  client scripts that are not JSON-LD.
 
-Before enabling in production, review privacy/cookie requirements for your audience.
-The default build has no analytics and no cookie banner.
+GA sets `_ga` cookies and may collect page views, approximate location, and device/
+browser signals. Review cookie/consent requirements for your audience. This build does
+**not** include a cookie-consent banner; add one or disable GA if your jurisdiction
+requires opt-in consent before analytics loads.
 
 ## SEO
 
@@ -160,7 +167,7 @@ The default build has no analytics and no cookie banner.
    - Build command: `npm run build`
    - Build output directory: `dist`
    - Root directory: `/`
-   - Optional environment variable: `PUBLIC_GA_MEASUREMENT_ID`
+   - Optional environment variable to override/disable GA: `PUBLIC_GA_MEASUREMENT_ID`
 4. Deploy to the preview domain and verify the routes, sitemap, robots, and 404.
 5. Add `tokgrid.app` as a custom domain only after confirming the current DNS setup.
    Do not overwrite existing DNS records without checking.
@@ -180,8 +187,8 @@ git push -u origin main
 ```
 
 The CI workflow in `.github/workflows/ci.yml` runs `npm ci` and `npm run verify` on
-pushes and pull requests to `main`. If you store a GA measurement ID as a repository
-variable named `PUBLIC_GA_MEASUREMENT_ID`, CI will build with it.
+pushes and pull requests to `main`. The production build uses the default GA4 ID; set
+`PUBLIC_GA_MEASUREMENT_ID` in the workflow environment only when you need an override.
 
 GitHub Pages is not the default target. A project-site subpath (`/<repo>/`) would break
 the root-relative links; use a custom domain or Cloudflare Pages unless a base-path
@@ -205,7 +212,7 @@ The website must not claim:
 - cross-page merge, historical snapshots, seller distribution, creator ratings, or
   automated outreach as current features;
 - every video is downloadable or every video has subtitles;
-- Excel/Google Sheets integration or a fixed Pro price.
+- Excel/Google Sheets integration, a subscription price, or a pricing table.
 
 Page data is processed locally. Subscription validation is a separate license check and
 does not include page data. See `/privacy/` for the precise distinction.
@@ -213,12 +220,15 @@ does not include page data. See `/privacy/` for the precise distinction.
 ## Pending inputs
 
 - Real product screenshots (see `docs/screenshot-guide.md`).
-- Support email / support URL and a privacy contact.
+- Chrome Web Store Support URL (email is set to `pandahi.cc@gmail.com`).
 - GitHub remote URL and credentials.
-- Optional GA4 measurement ID.
 - Cloudflare Pages/DNS access.
-- Confirmation of whether to publish Pro pricing.
+- GA consent/cookie compliance review for the target audience; no consent banner is
+  included in this build.
 - Chrome Web Store homepage/support URL updates and Search Console/Bing submission.
 
-Until those are supplied, the site uses labelled placeholders and does not claim to be
-deployed.
+Subscription pricing is intentionally not displayed. The product-price field described
+on the Product Research page is a data field, not a subscription price.
+
+Until the remaining inputs are supplied, the site uses labelled screenshot placeholders
+and does not claim to be deployed.

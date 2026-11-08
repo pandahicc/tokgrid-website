@@ -1,3 +1,5 @@
+const envGaMeasurementId = import.meta.env.PUBLIC_GA_MEASUREMENT_ID;
+
 export const SITE = {
   url: 'https://tokgrid.app',
   name: 'TokGrid',
@@ -7,8 +9,9 @@ export const SITE = {
   storeUrl:
     'https://chromewebstore.google.com/detail/tokgrid-%E2%80%94-video-analytics/cilbojljfiabbejnafhjlkofbanoflcl',
   version: '0.1.2',
-  supportEmail: null as string | null,
-  gaMeasurementId: import.meta.env.PUBLIC_GA_MEASUREMENT_ID ?? '',
+  supportEmail: 'pandahi.cc@gmail.com',
+  gaMeasurementId:
+    envGaMeasurementId ?? (import.meta.env.PROD ? 'G-8SL1Y6HB4Q' : ''),
 };
 
 export const NAV = [
@@ -128,6 +131,7 @@ export const FOOTER_COLUMNS = [
       { label: 'Support', href: '/support/' },
       { label: 'Privacy', href: '/privacy/' },
       { label: 'Changelog', href: '/changelog/' },
+      { label: 'Email support', href: `mailto:${SITE.supportEmail}` },
     ],
   },
 ] as const;

@@ -191,7 +191,10 @@ const limits = [
             <li class="flex gap-3"><Icon name="check" class="mt-1 h-4 w-4 shrink-0 text-brand-600" />Publishing frequency, duration distribution, and engagement composition.</li>
           </ul>
         </div>
-        <ScreenshotSlot id="analytics" />
+        <div class="grid gap-5">
+          <ScreenshotSlot id="analytics" />
+          <ScreenshotSlot id="scatter" />
+        </div>
       </div>
     </div>
   </section>
@@ -204,17 +207,20 @@ const limits = [
           title="Ask the page for more, without pretending it is complete."
           description="On supported list pages, auto-load scrolls through the viewport to trigger the page’s own loading behavior. You can stop it at any time."
         />
-        <div class="rounded-2xl border border-slate-200 bg-white p-6">
-          <ol class="space-y-4 text-sm leading-6 text-slate-600">
-            <li class="flex gap-3"><span class="font-bold text-brand-700">1.</span>Open a user profile, search, hashtag, Explore, or music-list page.</li>
-            <li class="flex gap-3"><span class="font-bold text-brand-700">2.</span>Start auto-load from the panel. It scrolls by viewport and lets the page load its own cards.</li>
-            <li class="flex gap-3"><span class="font-bold text-brand-700">3.</span>Stop manually, or let it stop when there are no new items, the page changes, the tab is hidden, a dialog opens, or a limit is reached.</li>
-            <li class="flex gap-3"><span class="font-bold text-brand-700">4.</span>Review the updated sample. It may increase page network and resource usage, and it does not guarantee a complete list.</li>
-          </ol>
-          <p class="mt-5 rounded-xl bg-slate-50 p-4 text-xs leading-5 text-slate-500">
-            Known caps: 30 attempts, 120 seconds, or 1,000 items. Login walls, rate limits,
-            and pages that stop returning new cards will end the run early.
-          </p>
+        <div class="space-y-5">
+          <div class="rounded-2xl border border-slate-200 bg-white p-6">
+            <ol class="space-y-4 text-sm leading-6 text-slate-600">
+              <li class="flex gap-3"><span class="font-bold text-brand-700">1.</span>Open a user profile, search, hashtag, Explore, or music-list page.</li>
+              <li class="flex gap-3"><span class="font-bold text-brand-700">2.</span>Start auto-load from the panel. It scrolls by viewport and lets the page load its own cards.</li>
+              <li class="flex gap-3"><span class="font-bold text-brand-700">3.</span>Stop manually, or let it stop when there are no new items, the page changes, the tab is hidden, a dialog opens, or a limit is reached.</li>
+              <li class="flex gap-3"><span class="font-bold text-brand-700">4.</span>Review the updated sample. It may increase page network and resource usage, and it does not guarantee a complete list.</li>
+            </ol>
+            <p class="mt-5 rounded-xl bg-slate-50 p-4 text-xs leading-5 text-slate-500">
+              Known caps: 30 attempts, 120 seconds, or 1,000 items. Login walls, rate limits,
+              and pages that stop returning new cards will end the run early.
+            </p>
+          </div>
+          <ScreenshotSlot id="auto-load" />
         </div>
       </div>
     </div>

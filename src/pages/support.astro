@@ -158,9 +158,8 @@ const troubleshooting = [
             <h3 class="text-sm font-bold text-slate-950">Pro activation</h3>
             <p class="mt-2 text-sm leading-6 text-slate-600">
               Pro covers batch downloads, selected-video CSV/JSON export, and product data
-              export. Open the subscription flow from Settings. Pricing is shown there, not
-              on this website. TokGrid does not handle card details; the checkout is
-              external.
+              export. Open the subscription flow from Settings for the current plan details.
+              TokGrid does not handle card details; the checkout is external.
             </p>
           </div>
           <div class="rounded-2xl border border-amber-200 bg-amber-50 p-5">
@@ -186,11 +185,17 @@ const troubleshooting = [
           <div class="flex gap-3">
             <Icon name="mail" class="mt-0.5 h-5 w-5 shrink-0 text-brand-700" />
             <div>
-              <p class="text-sm font-bold text-slate-950">Support contact is being finalized.</p>
+              <p class="text-sm font-bold text-slate-950">Email support</p>
               <p class="mt-1.5 text-sm leading-6 text-slate-600">
-                A public support email is not published yet. Until it is available, use the
-                support channel on the Chrome Web Store listing once it is configured. Do not
-                send page data, account credentials, or subscription tokens in a support request.
+                Write to{' '}
+                <a
+                  href={`mailto:${SITE.supportEmail}`}
+                  class="font-semibold text-brand-700 hover:underline"
+                >
+                  {SITE.supportEmail}
+                </a>
+                {' '}for support or privacy questions. Do not send page data, account
+                credentials, or subscription tokens in a support request.
               </p>
             </div>
           </div>

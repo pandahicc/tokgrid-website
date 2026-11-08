@@ -1,6 +1,7 @@
 ---
 import Breadcrumbs from '../components/Breadcrumbs.astro';
 import Icon from '../components/Icon.astro';
+import ScreenshotSlot from '../components/ScreenshotSlot.astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { breadcrumbSchema } from '../lib/schema';
 import { SITE } from '../data/site';
@@ -8,7 +9,7 @@ import { SITE } from '../data/site';
 const title = 'Privacy Policy — TokGrid';
 const description =
   'How TokGrid handles public page data, extension storage, subscription validation, feedback forms, and this static website.';
-const gaEnabled = Boolean(import.meta.env.PUBLIC_GA_MEASUREMENT_ID);
+const gaEnabled = Boolean(SITE.gaMeasurementId);
 const lastUpdated = 'November 8, 2026';
 const jsonLd = [
   breadcrumbSchema([
@@ -53,7 +54,7 @@ const jsonLd = [
             <strong>Short version:</strong> the extension processes public page data in
             your browser. Page data is not uploaded to TokGrid. A separate license check
             may contact the subscription server with an account identifier and token.
-            This website is static and, by default, loads no analytics.
+            This website is static; analytics is described in section 7.
           </p>
         </div>
       </div>
@@ -152,15 +153,22 @@ const jsonLd = [
         <li>Tally submissions are handled by the operator for support and reward follow-up, subject to the form’s own terms.</li>
       </ul>
 
+      <div class="not-prose my-10">
+        <ScreenshotSlot
+          id="privacy"
+          caption="The Settings and privacy center referenced in this policy."
+        />
+      </div>
+
       <h2>7. This website</h2>
       <p>
-        This website is a static site. By default it does not load Google Analytics, a
-        tag manager, advertising pixels, embedded videos, third-party fonts, or contact
-        forms. It does not set cookies or tracking identifiers. The site is designed to
-        be served by a static hosting provider, such as Cloudflare Pages; the hosting
-        provider may process standard request metadata (such as IP address, user agent,
-        and timestamp) for delivery, security, and abuse prevention under its own
-        policy.
+        This website is a static site. It does not load a tag manager, advertising
+        pixels, embedded videos, third-party fonts, or contact forms. It does not set
+        its own cookies. When Google Analytics is enabled for the build (see below),
+        GA may set its own cookies. The site is designed to be served by a static hosting
+        provider, such as Cloudflare Pages; the hosting provider may process standard
+        request metadata (such as IP address, user agent, and timestamp) for delivery,
+        security, and abuse prevention under its own policy.
       </p>
 
       {
@@ -168,13 +176,13 @@ const jsonLd = [
           <>
             <h3>Google Analytics (enabled on this build)</h3>
             <p>
-              This build has a Google Analytics 4 measurement ID configured. GA4 may
-              collect page views, approximate location derived from the request,
-              device/browser information, and interaction events, and may set
-              <code>_ga</code> cookies. TokGrid uses this only to understand aggregate
-              website usage. You can block GA with browser settings, an extension, or
-              a consent control where one is required. The extension itself does not
-              contain Google Analytics.
+              This build uses Google Analytics 4 with measurement ID
+              <code>{SITE.gaMeasurementId}</code>. GA4 may collect page views,
+              approximate location derived from the request, device/browser information,
+              and interaction events, and may set <code>_ga</code> cookies. TokGrid uses
+              this only to understand aggregate website usage. You can block GA with
+              browser settings, an extension, or a consent control where one is required.
+              The extension itself does not contain Google Analytics.
             </p>
           </>
         ) : (
@@ -202,7 +210,7 @@ const jsonLd = [
         <li><strong>pandahi.cc</strong> — subscription checkout and license validation.</li>
         <li><strong>Tally</strong> — user-opened feedback and reward forms.</li>
         <li><strong>Static hosting provider</strong> — website delivery and standard request logs.</li>
-        <li><strong>Google Analytics</strong> — only when a measurement ID is configured for the site build.</li>
+        <li><strong>Google Analytics</strong> — when enabled for the site build.</li>
       </ul>
       <p>
         TokGrid does not sell page data. It does not use page data for advertising. It
@@ -221,9 +229,12 @@ const jsonLd = [
 
       <h2>11. Contact</h2>
       <p>
-        A dedicated public privacy and support contact is still being finalized. Until it
-        is published, use the support link on the Chrome Web Store listing. Do not send
-        page data, account credentials, or subscription tokens in a support request.
+        For privacy questions or support, email{' '}
+        <a href={`mailto:${SITE.supportEmail}`} class="font-semibold">
+          {SITE.supportEmail}
+        </a>
+        . Do not send page data, account credentials, or subscription tokens in a support
+        request.
       </p>
 
       <h2>12. Changes</h2>

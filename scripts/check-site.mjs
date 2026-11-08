@@ -5,7 +5,8 @@ import path from 'node:path';
 const ROOT = process.cwd();
 const DIST = path.join(ROOT, 'dist');
 const BASE = 'https://tokgrid.app';
-const GA_ENABLED = Boolean(process.env.PUBLIC_GA_MEASUREMENT_ID);
+const GA_ID = process.env.PUBLIC_GA_MEASUREMENT_ID ?? 'G-8SL1Y6HB4Q';
+const GA_ENABLED = GA_ID !== '';
 const errors = [];
 const warnings = [];
 
@@ -148,6 +149,17 @@ for (const file of htmlFiles) {
     errors.push(`${page}: contains a TODO or lorem ipsum marker`);
   }
 
+  if (/US\$\s?\d[\d.,]*|\$\s?\d[\d.,]*|Pricing is shown/i.test(html)) {
+    errors.push(`${page}: subscription price text detected`);
+  }
+
+  if (
+    (page === '/support/' || page === '/privacy/') &&
+    !html.includes('pandahi.cc@gmail.com')
+  ) {
+    errors.push(`${page}: missing support email`);
+  }
+
   const hrefRe = /href=["']([^"']+)["']/gi;
   let hrefMatch;
   const seenLinks = new Set();
@@ -247,7 +259,11 @@ if (errors.length > 0) {
   process.exitCode = 1;
 } else {
   console.log(`Site check passed: ${htmlFiles.length} HTML pages, 19 sitemap URLs.`);
-  if (GA_ENABLED) console.log('GA4 is enabled for this build; GA scripts were allowed.');
+  if (GA_ENABLED) {
+    console.log(`GA4 is enabled for this build (${GA_ID}); GA scripts were allowed.`);
+  } else {
+    console.log('GA4 is disabled for this build; no GA scripts were allowed.');
+  }
   if (warnings.length > 0) {
     for (const warning of warnings) console.warn(`  warning: ${warning}`);
   }
