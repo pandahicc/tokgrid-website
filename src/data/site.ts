@@ -136,6 +136,17 @@ export const FOOTER_COLUMNS = [
   },
 ] as const;
 
+export const RELATED_TOOLS = [
+  {
+    name: 'ATK — TikTok Live Monitor',
+    href: 'https://atk-live.com/',
+  },
+  {
+    name: 'TikTok Subtitle Export',
+    href: 'https://tiktoksubtitleexport.com/',
+  },
+] as const;
+
 export function storeUrl(campaign: string): string {
   const url = new URL(SITE.storeUrl);
   url.searchParams.set('utm_source', 'tokgrid.app');
