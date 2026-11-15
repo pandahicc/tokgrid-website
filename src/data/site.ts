@@ -145,6 +145,10 @@ export const RELATED_TOOLS = [
     name: 'TikTok Subtitle Export',
     href: 'https://tiktoksubtitleexport.com/',
   },
+  {
+    name: 'BVT — TikTok Batch Downloader',
+    href: 'https://bvtdownloader.app/',
+  },
 ] as const;
 
 export function storeUrl(campaign: string): string {
