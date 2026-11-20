@@ -1,0 +1,28 @@
+---
+import Icon from './Icon.astro';
+import { STORE_SIGNALS, hasSocialProof } from '../data/store';
+
+const visible = hasSocialProof();
+const showRating =
+  STORE_SIGNALS.ratingCount > 0 &&
+  STORE_SIGNALS.ratingCount >= 10;
+const showUsers = STORE_SIGNALS.users >= 100;
+
+function formatCount(value: number): string {
+  return new Intl.NumberFormat('en-US', { notation: 'compact' }).format(value);
+}
+---
+
+{
+  visible && (
+    <p class="mt-4 inline-flex flex-wrap items-center gap-x-3 gap-y-1 text-xs font-medium text-slate-500">
+      <Icon name="check" class="h-3.5 w-3.5 text-brand-600" />
+      {showRating && (
+        <span>
+          {STORE_SIGNALS.rating.toFixed(1)} out of 5 from {formatCount(STORE_SIGNALS.ratingCount)} ratings
+        </span>
+      )}
+      {showUsers && <span>{formatCount(STORE_SIGNALS.users)} Chrome users</span>}
+    </p>
+  )
+}

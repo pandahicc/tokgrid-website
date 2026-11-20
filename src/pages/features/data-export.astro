@@ -9,7 +9,7 @@ import ScreenshotSlot from '../../components/ScreenshotSlot.astro';
 import SectionHeading from '../../components/SectionHeading.astro';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { DATA_EXPORT_FAQS } from '../../data/faqs';
-import { getGuidesForFeature, getPublishedGuides } from '../../lib/content';
+import { getGuidesForFeaturePage, getPublishedGuides } from '../../lib/content';
 import { breadcrumbSchema, faqSchema } from '../../lib/schema';
 
 const title = 'Export TikTok Research Data — TokGrid';
@@ -17,7 +17,7 @@ const description =
   'Export selected public TikTok video data as CSV or JSON with configurable fields. Product data export is also available on Pro.';
 
 const guides = await getPublishedGuides();
-const related = getGuidesForFeature('/features/data-export/', guides, 2);
+const related = getGuidesForFeaturePage('/features/data-export/', guides);
 const jsonLd = [
   breadcrumbSchema([
     { name: 'Home', href: '/' },

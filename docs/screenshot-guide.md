@@ -23,19 +23,19 @@ rebuild; the placeholder is replaced automatically.
 
 | # | Name / expected file | Where it appears | What it should show |
 |---|---|---|---|
-| 1 | `overlay-hover.webp` | Home product preview; How to Calculate TikTok Engagement Rate | Public TikTok page with TokGrid overlay badges for views, engagement rate, and commerce/ad status, plus the hover card. |
-| 2 | `data-list-filters.webp` | TikTok Video Analytics | Data tab with video covers, metrics, quick filters, sort controls, and pagination. |
+| 1 | `overlay-hover.webp` | Home hero; Chrome Extension page; How to Calculate TikTok Engagement Rate | Public TikTok page with TokGrid overlay badges for views, engagement rate, and commerce/ad status, plus the hover card. |
+| 2 | `data-list-filters.webp` | TikTok Video Analytics; Chrome Extension page | Data tab with video covers, metrics, quick filters, sort controls, and pagination. |
 | 3 | `analytics-overview.webp` | TikTok Video Analytics; How to Analyze TikTok Video Performance | Stats overview with sample size, median views/engagement, valid coverage, and Top 10. |
 | 4 | `scatter-plot.webp` | Home product preview; TikTok Video Analytics; How to Find High-Performing TikTok Videos | Views-by-engagement scatter, including the valid/missing/zero-view explanation and linear/log scale control. |
 | 5 | `product-research.webp` | TikTok Product Research; How to Research TikTok Competitors | Products tab with product covers, titles, category paths, seller IDs, and SKU counts. |
 | 6 | `product-categories.webp` | TikTok Product Research; How to Find TikTok Products by Category | Category distribution with first/second/third-level totals and uncategorized/incomplete counts. |
-| 7 | `download-subtitle.webp` | TikTok Video and Subtitle Downloads | Single-video quality picker and original/translated subtitle download controls (VTT/SRT). |
-| 8 | `batch-download.webp` | TikTok Video and Subtitle Downloads; How to Bulk Download TikTok Videos | Pro batch download with overall progress, per-item status, failure list, cancel, and optional SRT sidecar. |
+| 7 | `download-subtitle.webp` | TikTok Video Downloader (single downloads section) | Single-video quality picker and original/translated subtitle download controls (VTT/SRT). |
+| 8 | `batch-download.webp` | TikTok Video Downloader; Chrome Extension page; How to Bulk Download TikTok Videos | Pro batch download with overall progress, per-item status, failure list, cancel, and optional SRT sidecar. |
 | 9 | `export-fields.webp` | Export TikTok Research Data; How to Export TikTok Video Data to CSV | Export field picker, CSV/JSON format choice, selected count, and a CSV preview. |
 | 10 | `auto-load.webp` | TikTok Video Analytics | Auto-load control on a supported list page, with current attempts/items and stop state. |
 | 11 | `creator-publishing.webp` | How to Analyze TikTok Creator Content | Content and publishing view with posting frequency, duration distribution, and engagement composition. |
 | 12 | `settings-privacy.webp` | Privacy Policy | Settings/privacy center with overlay fields, export fields, storage usage, activity log, and data-clearing controls. |
-| 13 | `preview-sort-filters.webp` | Home hero; How to Preview, Sort, and Filter TikTok Videos | Video preview modal with Cards/List view, quick filters, more filters, sort order, selection, and Pro download/export actions. |
+| 13 | `preview-sort-filters.webp` | Home product preview; How to Preview, Sort, and Filter TikTok Videos | Video preview modal with Cards/List view, quick filters, more filters, sort order, selection, and Pro download/export actions. |
 
 ## Adding a file
 

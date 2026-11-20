@@ -163,12 +163,24 @@ const jsonLd = [
       <h2>7. This website</h2>
       <p>
         This website is a static site. It does not load a tag manager, advertising
-        pixels, embedded videos, third-party fonts, or contact forms. It does not set
+        pixels, third-party fonts, or contact forms by default, and it does not set
         its own cookies. When Google Analytics is enabled for the build (see below),
         GA may set its own cookies. The site is designed to be served by a static hosting
         provider, such as Cloudflare Pages; the hosting provider may process standard
         request metadata (such as IP address, user agent, and timestamp) for delivery,
         security, and abuse prevention under its own policy.
+      </p>
+
+      <h3>Optional TikTok link preview</h3>
+      <p>
+        The TikTok video downloader page includes a paste-a-link preview. Nothing is
+        sent until you submit a link. On submit, your browser requests TikTok’s public
+        oEmbed endpoint at <code>www.tiktok.com/oembed</code> and, if the link resolves,
+        loads a TikTok player iframe on this site. TikTok receives that video URL and
+        standard request data (such as IP address and user agent) under its own policy.
+        The link is not sent to TokGrid, is not stored by this site, and is not added to
+        analytics events. The preview widget’s analytics records only the event type and
+        the link kind or error type, never the URL.
       </p>
 
       {

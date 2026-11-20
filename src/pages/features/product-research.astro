@@ -9,7 +9,7 @@ import ScreenshotSlot from '../../components/ScreenshotSlot.astro';
 import SectionHeading from '../../components/SectionHeading.astro';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { PRODUCT_RESEARCH_FAQS } from '../../data/faqs';
-import { getGuidesForFeature, getPublishedGuides } from '../../lib/content';
+import { getGuidesForFeaturePage, getPublishedGuides } from '../../lib/content';
 import { breadcrumbSchema, faqSchema } from '../../lib/schema';
 
 const title = 'TikTok Product Research — TokGrid';
@@ -17,7 +17,7 @@ const description =
   'Organize product anchors from public TikTok pages into structured cards with category paths, seller IDs, SKU counts, and product IDs.';
 
 const guides = await getPublishedGuides();
-const related = getGuidesForFeature('/features/product-research/', guides, 2);
+const related = getGuidesForFeaturePage('/features/product-research/', guides);
 const jsonLd = [
   breadcrumbSchema([
     { name: 'Home', href: '/' },

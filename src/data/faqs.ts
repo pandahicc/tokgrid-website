@@ -94,6 +94,14 @@ export const BULK_DOWNLOAD_FAQS: FaqItem[] = [
     a: 'No. Only videos with a playable address in the available page data can be downloaded. Some videos have no playable source, and the available qualities depend on what the page exposes.',
   },
   {
+    q: 'Can I download a video from this website?',
+    a: 'No. This page can preview a single public video with TikTok’s oEmbed player, but the file and subtitle downloads happen in the TokGrid Chrome extension on the video page. The extension is available for desktop Chrome 111 or newer.',
+  },
+  {
+    q: 'Does TokGrid remove the watermark?',
+    a: 'The saved file does not carry the TikTok watermark: TokGrid downloads the page’s playable source rather than the watermarked download file, and it does not strip or re-encode the video. If a video exposes only a download source, the file can differ.',
+  },
+  {
     q: 'What is free and what requires Pro?',
     a: 'Single video download and single subtitle download are free. Batch downloads, selected-video CSV/JSON export, and product data export require Pro.',
   },
@@ -170,5 +178,44 @@ export const SUPPORT_FAQS: FaqItem[] = [
   {
     q: 'Where can I get help?',
     a: 'Email pandahi.cc@gmail.com for support or privacy questions. Do not send page data, account credentials, or subscription tokens in a support request.',
+  },
+];
+
+export const CHROME_EXTENSION_FAQS: FaqItem[] = [
+  {
+    q: 'How do I install TokGrid?',
+    a: 'Open the Chrome Web Store listing, choose Add to Chrome, and confirm the permission prompt. Then pin the TokGrid icon from the puzzle-piece Extensions menu. Open a public tiktok.com page and the panel appears on the right.',
+  },
+  {
+    q: 'Where is the TokGrid icon after I install it?',
+    a: 'TokGrid installs a toolbar icon. Chrome may hide it behind the puzzle-piece Extensions menu; pin it there for one-click access. On the page itself, the panel starts collapsed on the Home, Explore, and video detail pages, so use the right-edge tab to open it.',
+  },
+  {
+    q: 'Why does TokGrid need to read tiktok.com pages?',
+    a: 'The extension reads the video and product cards that the public page has already rendered, using a read-only page script. It does not override fetch or XHR, does not intercept network requests, and does not call TikTok APIs in the background to collect data.',
+  },
+  {
+    q: 'Does TokGrid upload my page data?',
+    a: 'No. Page data is processed in your browser and is not uploaded to TokGrid. Subscription validation is a separate license check that does not include page data. The extension contains no analytics or telemetry.',
+  },
+  {
+    q: 'Is there a web version I can use without installing anything?',
+    a: 'The website can preview one public video through TikTok’s oEmbed player, but it cannot download a file. Downloads, subtitles, sample analytics, and CSV/JSON export run in the Chrome extension on the page itself.',
+  },
+  {
+    q: 'Which browsers and versions are supported?',
+    a: 'TokGrid targets desktop Chrome 111 or newer. Chromium-based browsers may work, but they are not officially supported. Chrome for Android and Chrome for iOS do not support extensions, so TokGrid is desktop only.',
+  },
+  {
+    q: 'What is free and what requires Pro?',
+    a: 'The page overlay, data list, filters, sample analytics, product browsing, single video download, and single subtitle download are free. Pro adds batch downloads, selected-video CSV/JSON export, and product data export. Pro is a paid upgrade; current plan details are in the extension.',
+  },
+  {
+    q: 'Why is batch download limited to Chrome 111 or newer?',
+    a: 'Batch download uses the File System Access API to write into a folder you choose, and the page reader uses a MAIN-world content script. Both require a modern desktop Chrome. An individual batch run is also best-effort: it uses the cards the page has loaded, up to the auto-load limits.',
+  },
+  {
+    q: 'Does TokGrid work on private or logged-in pages?',
+    a: 'No. TokGrid is designed for public pages that are accessible without logging in. It does not bypass login, CAPTCHA, DRM, rate limits, or other access controls.',
   },
 ];

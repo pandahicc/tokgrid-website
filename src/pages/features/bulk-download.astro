@@ -7,22 +7,23 @@ import Icon from '../../components/Icon.astro';
 import InstallButton from '../../components/InstallButton.astro';
 import ScreenshotSlot from '../../components/ScreenshotSlot.astro';
 import SectionHeading from '../../components/SectionHeading.astro';
+import VideoLinkPreview from '../../components/VideoLinkPreview.astro';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { BULK_DOWNLOAD_FAQS } from '../../data/faqs';
-import { getGuidesForFeature, getPublishedGuides } from '../../lib/content';
+import { getGuidesForFeaturePage, getPublishedGuides } from '../../lib/content';
 import { breadcrumbSchema, faqSchema } from '../../lib/schema';
 
-const title = 'TikTok Video & Subtitle Downloads — TokGrid';
+const title = 'TikTok Video Downloader — Download Videos & Subtitles | TokGrid';
 const description =
-  'Download a single public TikTok video in an available quality, save VTT/SRT subtitles, or use Pro batch downloads with optional SRT sidecars.';
+  'Download a public TikTok video without a watermark in an available quality, save subtitles as SRT or VTT, or batch-download a profile with the TokGrid Chrome extension.';
 
 const guides = await getPublishedGuides();
-const related = getGuidesForFeature('/features/bulk-download/', guides, 2);
+const related = getGuidesForFeaturePage('/features/bulk-download/', guides);
 const jsonLd = [
   breadcrumbSchema([
     { name: 'Home', href: '/' },
     { name: 'Features', href: '/features/' },
-    { name: 'Video & Subtitle Downloads', href: '/features/bulk-download/' },
+    { name: 'TikTok Video Downloader', href: '/features/bulk-download/' },
   ]),
   faqSchema(BULK_DOWNLOAD_FAQS),
 ];
@@ -55,30 +56,37 @@ const limits = [
         items={[
           { name: 'Home', href: '/' },
           { name: 'Features', href: '/features/' },
-          { name: 'Video & Subtitle Downloads', href: '/features/bulk-download/' },
+          { name: 'TikTok Video Downloader', href: '/features/bulk-download/' },
         ]}
       />
-      <div class="mt-8 grid gap-10 lg:grid-cols-[1.05fr_0.95fr] lg:items-center">
+      <div class="mt-8 grid gap-10 lg:grid-cols-[1.05fr_0.95fr] lg:items-start">
         <div>
           <p class="text-xs font-bold uppercase tracking-[0.18em] text-brand-600">
-            Downloads
+            TikTok video downloader
           </p>
           <h1 class="mt-4 text-4xl font-bold tracking-tight text-slate-950 sm:text-5xl">
-            TikTok Video and Subtitle Downloads
+            TikTok Video Downloader
           </h1>
           <p class="mt-5 max-w-2xl text-lg leading-8 text-slate-600">
-            Save a single video in an available quality or download its subtitle tracks
-            as VTT or SRT. On Pro, batch download the selected videos to a folder you
-            choose.
+            Download a public TikTok video without a watermark, in an available quality,
+            and save its subtitle tracks as VTT or SRT. Single video and single subtitle
+            downloads are free; Pro adds batch downloads for a whole profile with optional
+            SRT sidecars. Processing stays in your browser, on the page you already opened.
+          </p>
+          <p class="mt-3 text-xs leading-5 text-slate-500">
+            Desktop Chrome 111+ only.{' '}
+            <a href="/chrome-extension/" class="font-semibold text-brand-700 hover:underline">
+              Install steps and permissions
+            </a>.
           </p>
           <div class="mt-7 flex flex-col items-start gap-3 sm:flex-row sm:items-center">
-            <InstallButton campaign="feature-bulk-download" label="Install TokGrid" />
+            <InstallButton campaign="feature-bulk-download" label="Add to Chrome — Free" />
             <a href="/guides/how-to-bulk-download-tiktok-videos/" class="text-sm font-semibold text-brand-700 hover:underline">
               Read the bulk download guide
             </a>
           </div>
         </div>
-        <ScreenshotSlot id="download" priority />
+        <VideoLinkPreview />
       </div>
     </div>
   </section>
@@ -151,6 +159,9 @@ const limits = [
             Availability is determined by the page. A video can have no playable source,
             and a subtitle track can be absent even when the video is playable.
           </p>
+        </div>
+        <div class="lg:col-start-2">
+          <ScreenshotSlot id="download" />
         </div>
       </div>
     </div>

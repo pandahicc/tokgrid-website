@@ -3,12 +3,12 @@ const envGaMeasurementId = import.meta.env.PUBLIC_GA_MEASUREMENT_ID;
 export const SITE = {
   url: 'https://tokgrid.app',
   name: 'TokGrid',
-  title: 'TokGrid — TikTok Video Analytics & Product Research',
+  title: 'TokGrid — TikTok Analytics & Research Chrome Extension',
   description:
-    'Analyze TikTok video performance, research competitors, explore products, and export structured data with TokGrid, a local-first Chrome extension.',
+    'A local-first Chrome extension that turns public TikTok pages into a filterable list: page analytics, product research, video and subtitle downloads, CSV/JSON export.',
   storeUrl:
     'https://chromewebstore.google.com/detail/tokgrid-%E2%80%94-video-analytics/cilbojljfiabbejnafhjlkofbanoflcl',
-  version: '0.1.2',
+  version: '0.1.3',
   supportEmail: 'pandahi.cc@gmail.com',
   gaMeasurementId:
     envGaMeasurementId ?? (import.meta.env.PROD ? 'G-8SL1Y6HB4Q' : ''),
@@ -16,6 +16,7 @@ export const SITE = {
 
 export const NAV = [
   { label: 'Features', href: '/features/' },
+  { label: 'Extension', href: '/chrome-extension/' },
   { label: 'Guides', href: '/guides/' },
   { label: 'Changelog', href: '/changelog/' },
   { label: 'Privacy', href: '/privacy/' },
@@ -40,11 +41,11 @@ export const FEATURES = [
   },
   {
     id: 'bulk-download',
-    title: 'Video & Subtitle Downloads',
+    title: 'TikTok Video Downloader',
     href: '/features/bulk-download/',
     icon: 'download',
     description:
-      'Save a single video in an available quality, or download original and translated subtitles as VTT/SRT. Pro adds batch downloads.',
+      'Download a public video without a watermark in an available quality, or save subtitles as VTT/SRT. Single downloads are free; Pro adds batch downloads to a folder.',
   },
   {
     id: 'data-export',
@@ -96,9 +97,10 @@ export const FOOTER_COLUMNS = [
     title: 'Features',
     links: [
       { label: 'All features', href: '/features/' },
+      { label: 'Chrome Extension', href: '/chrome-extension/' },
       { label: 'Video Analytics', href: '/features/video-analytics/' },
       { label: 'Product Research', href: '/features/product-research/' },
-      { label: 'Video & Subtitle Downloads', href: '/features/bulk-download/' },
+      { label: 'TikTok Video Downloader', href: '/features/bulk-download/' },
       { label: 'Data Export', href: '/features/data-export/' },
     ],
   },
@@ -135,6 +137,33 @@ export const FOOTER_COLUMNS = [
     ],
   },
 ] as const;
+
+/**
+ * Curated guide links shown on each feature page. Keeping this explicit means
+ * every guide is reachable from a feature page in two clicks from the homepage,
+ * and the order can match the workflow instead of the publication date.
+ */
+export const FEATURE_GUIDES: Record<string, readonly string[]> = {
+  '/features/video-analytics/': [
+    'how-to-analyze-tiktok-video-performance',
+    'how-to-calculate-tiktok-engagement-rate',
+    'how-to-find-high-performing-tiktok-videos',
+    'how-to-analyze-tiktok-creator-content',
+    'how-to-research-tiktok-competitors',
+  ],
+  '/features/product-research/': [
+    'how-to-find-tiktok-products-by-category',
+    'how-to-research-tiktok-competitors',
+  ],
+  '/features/data-export/': [
+    'how-to-export-tiktok-video-data-to-csv',
+    'how-to-preview-sort-and-filter-tiktok-videos',
+  ],
+  '/features/bulk-download/': [
+    'how-to-bulk-download-tiktok-videos',
+    'how-to-export-tiktok-video-data-to-csv',
+  ],
+};
 
 export const RELATED_TOOLS = [
   {

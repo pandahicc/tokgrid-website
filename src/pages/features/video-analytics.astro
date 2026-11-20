@@ -9,7 +9,7 @@ import ScreenshotSlot from '../../components/ScreenshotSlot.astro';
 import SectionHeading from '../../components/SectionHeading.astro';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { VIDEO_ANALYTICS_FAQS } from '../../data/faqs';
-import { getGuidesForFeature, getPublishedGuides } from '../../lib/content';
+import { getGuidesForFeaturePage, getPublishedGuides } from '../../lib/content';
 import { breadcrumbSchema, faqSchema } from '../../lib/schema';
 
 const title = 'TikTok Video Analytics — TokGrid';
@@ -17,7 +17,7 @@ const description =
   'Review views, likes, comments, shares, saves, and calculated engagement rate for the public TikTok videos already loaded on the page.';
 
 const guides = await getPublishedGuides();
-const related = getGuidesForFeature('/features/video-analytics/', guides, 2);
+const related = getGuidesForFeaturePage('/features/video-analytics/', guides);
 const jsonLd = [
   breadcrumbSchema([
     { name: 'Home', href: '/' },

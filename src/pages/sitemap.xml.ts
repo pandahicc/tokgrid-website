@@ -9,6 +9,7 @@ const STATIC_PATHS = [
   '/features/product-research/',
   '/features/bulk-download/',
   '/features/data-export/',
+  '/chrome-extension/',
   '/guides/',
   '/privacy/',
   '/support/',

@@ -7,7 +7,7 @@ data export.
 - Production URL: `https://tokgrid.app/`
 - Chrome Web Store: [TokGrid — Video Analytics & Downloader](https://chromewebstore.google.com/detail/tokgrid-%E2%80%94-video-analytics/cilbojljfiabbejnafhjlkofbanoflcl)
 - Content language: English
-- Current extension version referenced by the site: `0.1.2`
+- Current extension version referenced by the site: `0.1.3`
 - Support and privacy email: `pandahi.cc@gmail.com`
 
 ## Stack
@@ -18,7 +18,7 @@ data export.
 | Styling | Tailwind CSS 4.3.5 via `@tailwindcss/vite` |
 | Content | Astro Content Collections + MDX (`@astrojs/mdx` 8.1.3) |
 | Hosting | Cloudflare Pages, Cloudflare Workers Builds, or any static host |
-| Client JS | No framework client JS; JSON-LD plus GA4 (production default) |
+| Client JS | Vanilla, Astro-bundled script for the link preview; JSON-LD; GA4 (production default) |
 | Analytics | GA4 enabled by default in production with `G-8SL1Y6HB4Q`; env override/disable |
 
 The site has no backend, database, CMS, user accounts, or contact form.
@@ -28,9 +28,10 @@ The site has no backend, database, CMS, user accounts, or contact form.
 ```bash
 npm install
 npm run dev        # http://localhost:4321
+npm run test       # node:test unit tests for the link-preview helpers
 npm run build      # dist/
 npm run check      # link, metadata, JSON-LD, sitemap and asset checks
-npm run verify     # build + check
+npm run verify     # test + build + check
 npm run preview    # preview the production build
 ```
 
@@ -46,13 +47,13 @@ npm install --cache /tmp/npm-cache
 
 ```text
 src/
-  components/           Shared UI (header, footer, CTA, FAQ, SEO, screenshot slot, GA)
+  components/           Shared UI (header, footer, CTA, FAQ, SEO, screenshot slot, GA, link preview)
   content/guides/       9 MDX guides
   content.config.ts     Guides collection schema
-  data/                 Site config, FAQ copy, screenshot registry
+  data/                 Site config, FAQ copy, screenshot registry, store signals
   layouts/              BaseLayout and ArticleLayout
-  lib/                  Content helpers and JSON-LD schema builders
-  pages/                All routes, including sitemap.xml.ts
+  lib/                  Content helpers, JSON-LD builders, TikTok URL/oEmbed helpers
+  pages/                All routes (including /chrome-extension/), plus sitemap.xml.ts
   styles/global.css     Tailwind theme, prose, placeholders, print/reduced-motion
 public/
   images/               Brand icon files
@@ -138,20 +139,36 @@ When enabled:
 
 - `GoogleAnalytics.astro` adds the `gtag.js` script and inline configuration.
 - The Privacy page renders the “analytics enabled” section and mentions GA cookies.
-- `scripts/check-site.mjs` allows the GA scripts; when explicitly disabled, it rejects
-  client scripts that are not JSON-LD.
+- `scripts/check-site.mjs` allows the GA scripts and the one first-party module script
+  Astro bundles from `/_astro/` for the link preview. Other third-party or inline
+  scripts are rejected when GA is disabled.
 
 GA sets `_ga` cookies and may collect page views, approximate location, and device/
 browser signals. Review cookie/consent requirements for your audience. This build does
 **not** include a cookie-consent banner; add one or disable GA if your jurisdiction
 requires opt-in consent before analytics loads.
 
+## Link preview (download page)
+
+`/features/bulk-download/` includes a paste-a-link preview. It is deliberately limited:
+
+- It accepts a single public TikTok video URL (or a `vm.` / `vt.` short link), validates it
+  with `src/lib/tiktok-url.mjs`, and asks `https://www.tiktok.com/oembed` for a player id.
+- It builds the player URL itself from the numeric id; it never injects the HTML returned
+  by oEmbed.
+- The site has no backend and cannot download a file. The result card hands the visitor to
+  the extension, and the batch pitch is marked Pro.
+- The request happens only after submit. The link is not sent to TokGrid, stored, or added
+  to GA events. See `/privacy/` section 7.
+- If oEmbed is unavailable or changes shape, the widget shows an error state and the
+  install CTA instead of failing silently.
+
 ## SEO
 
 - Per-page title, description, canonical URL, Open Graph and Twitter metadata.
 - JSON-LD: `SoftwareApplication`, `Organization`, `WebSite`, `FAQPage`,
   `BreadcrumbList`, `Article`, and `ItemList`.
-- Custom `src/pages/sitemap.xml.ts` includes all 19 indexable pages, with guide
+- Custom `src/pages/sitemap.xml.ts` includes all 21 indexable pages, with guide
   `lastmod` dates.
 - `public/robots.txt` points to `https://tokgrid.app/sitemap.xml`.
 - Canonical URLs use the root domain and trailing slashes.
@@ -221,8 +238,9 @@ refactor is added.
 
 ## Testing
 
-- `npm run verify` builds and checks all 21 HTML pages, metadata, JSON-LD, internal
-  links, assets, sitemap URLs, and robots.
+- `npm run test` runs the `node:test` units for the TikTok URL parser and oEmbed helpers.
+- `npm run verify` runs the tests, builds, and checks all 22 HTML pages, metadata,
+  JSON-LD, internal links, assets, sitemap URLs, and robots.
 - Manual responsive checks use Chrome at 390, 768, and 1440 widths.
 - Lighthouse results and current deployment status are recorded in
   `DELIVERY_REPORT.md` after verification.
@@ -237,7 +255,12 @@ The website must not claim:
 - cross-page merge, historical snapshots, seller distribution, creator ratings, or
   automated outreach as current features;
 - every video is downloadable or every video has subtitles;
+- that every download is watermark-free regardless of the source TikTok serves; the
+  verified claim is scoped to the playable source the page exposes;
 - Excel/Google Sheets integration, a subscription price, or a pricing table.
+
+Watermark-free was verified on 2026-11-20 with three samples. Keep the claim scoped to
+the playable source the page exposes; do not extend it to every possible TikTok source.
 
 Page data is processed locally. Subscription validation is a separate license check and
 does not include page data. See `/privacy/` for the precise distinction.
@@ -245,14 +268,14 @@ does not include page data. See `/privacy/` for the precise distinction.
 ## Pending inputs
 
 - Review or replace the supplied screenshots if needed; see `docs/screenshot-guide.md`.
-- Chrome Web Store Support URL (email is set to `pandahi.cc@gmail.com`).
+- Chrome Web Store homepage and support URLs already point to `tokgrid.app`; update them if the domain changes.
 - GitHub remote URL and credentials.
 - Cloudflare Pages/DNS access.
 - GA consent/cookie compliance review for the target audience; no consent banner is
   included in this build.
-- Chrome Web Store homepage/support URL updates and Search Console/Bing submission.
+- Search Console/Bing submission and the Chrome Web Store listing refresh (see `docs/chrome-web-store-update.md`).
 
 Subscription pricing is intentionally not displayed. The product-price field described
 on the Product Research page is a data field, not a subscription price.
 
-Until the remaining inputs are supplied, the site does not claim to be deployed.
+The site is live at `https://tokgrid.app/`; the items above are follow-ups, not deployment blockers.

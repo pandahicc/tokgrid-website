@@ -35,7 +35,7 @@ export function softwareApplicationSchema(): Record<string, unknown> {
     '@type': 'SoftwareApplication',
     name: SITE.name,
     applicationCategory: 'BrowserApplication',
-    operatingSystem: 'Chrome 111 or later',
+    operatingSystem: 'Chrome 111+ (desktop)',
     softwareVersion: SITE.version,
     description:
       'A local-first Chrome extension for TikTok video analytics, product research, video and subtitle downloads, and structured data export.',

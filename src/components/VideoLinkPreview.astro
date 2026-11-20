@@ -1,0 +1,263 @@
+---
+import InstallButton from './InstallButton.astro';
+
+interface Props {
+  campaign?: string;
+  className?: string;
+}
+
+const { campaign = 'bulk-download-preview', className = '' } = Astro.props;
+---
+
+<div
+  class:list={[
+    'rounded-3xl border border-slate-200 bg-white p-5 shadow-xl sm:p-6',
+    className,
+  ]}
+  data-tiktok-preview
+>
+  <form id="tiktok-preview-form" novalidate>
+    <label for="tiktok-preview-url" class="text-sm font-bold text-slate-950">
+      Paste a TikTok video link
+    </label>
+    <p id="tiktok-preview-hint" class="mt-1 text-xs leading-5 text-slate-500">
+      Preview one public video here. The file download itself happens in TokGrid on
+      desktop Chrome.
+    </p>
+    <div class="mt-3 flex flex-col gap-2 sm:flex-row">
+      <input
+        id="tiktok-preview-url"
+        name="url"
+        type="url"
+        inputmode="url"
+        autocomplete="off"
+        spellcheck="false"
+        maxlength="2048"
+        placeholder="https://www.tiktok.com/@creator/video/…"
+        aria-describedby="tiktok-preview-hint tiktok-preview-privacy tiktok-preview-status"
+        class="w-full min-w-0 rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm text-slate-900 placeholder:text-slate-400 focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-200"
+      />
+      <button
+        type="submit"
+        class="inline-flex shrink-0 items-center justify-center gap-2 rounded-xl bg-brand-600 px-5 py-3 text-sm font-semibold text-white transition-colors hover:bg-brand-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-700 disabled:cursor-wait disabled:opacity-70"
+      >
+        Preview
+      </button>
+    </div>
+    <p id="tiktok-preview-privacy" class="mt-2 text-[0.7rem] leading-5 text-slate-500">
+      On submit, your browser sends the link to the public TikTok oEmbed endpoint to
+      build the preview. TokGrid does not receive or store it.
+    </p>
+  </form>
+
+  <p
+    id="tiktok-preview-status"
+    class="sr-only"
+    role="status"
+    aria-live="polite"
+  >
+  </p>
+
+  <div
+    id="tiktok-preview-error"
+    hidden
+    class="mt-4 rounded-2xl border border-amber-200 bg-amber-50 p-4"
+  >
+    <p class="text-sm font-bold text-amber-950">Preview unavailable</p>
+    <p id="tiktok-preview-error-text" class="mt-1 text-sm leading-6 text-amber-900"></p>
+    <div class="mt-3">
+      <InstallButton campaign={`${campaign}-error`} label="Add to Chrome — Free" size="sm" />
+    </div>
+  </div>
+
+  <div id="tiktok-preview-result" hidden class="mt-5">
+    <div class="grid gap-5 sm:grid-cols-[minmax(0,190px)_1fr]">
+      <div
+        class="mx-auto w-full max-w-[190px] overflow-hidden rounded-2xl bg-slate-950"
+        style="aspect-ratio: 9 / 16;"
+      >
+        <iframe
+          id="tiktok-preview-player"
+          title="TikTok video preview"
+          class="h-full w-full"
+          style="border: 0;"
+          loading="lazy"
+          allow="encrypted-media; fullscreen; picture-in-picture"
+          referrerpolicy="strict-origin-when-cross-origin"
+          hidden
+        ></iframe>
+      </div>
+      <div class="min-w-0">
+        <p class="text-xs font-bold uppercase tracking-[0.14em] text-brand-700">
+          Link verified
+        </p>
+        <h3
+          id="tiktok-preview-heading"
+          tabindex="-1"
+          class="mt-2 text-lg font-bold text-slate-950 focus:outline-none"
+        >
+          Preview loaded from TikTok
+        </h3>
+        <p class="mt-2 text-sm leading-6 text-slate-600">
+          The preview comes from TikTok. To save the video file or its subtitles,
+          install TokGrid and use the download controls on the video page.
+        </p>
+        <div class="mt-4">
+          <InstallButton campaign={campaign} label="Add to Chrome — Free" />
+        </div>
+        <p class="mt-3 text-xs leading-5 text-slate-500">
+          Single video downloads are free. Batch downloads are Pro.{' '}
+          <a href="/chrome-extension/" class="font-semibold text-brand-700 hover:underline">
+            Install steps and permissions
+          </a>.
+        </p>
+      </div>
+    </div>
+
+    <p class="mt-4 rounded-xl bg-slate-50 p-4 text-xs leading-5 text-slate-600">
+      Downloading a whole profile? TokGrid Pro batch-downloads the videos loaded on a
+      profile — up to about 1,000 cards per run, with a three-way queue and optional
+      original-language SRT sidecars.
+    </p>
+  </div>
+
+  <noscript>
+    <p class="mt-4 rounded-xl border border-slate-200 bg-slate-50 p-4 text-sm leading-6 text-slate-600">
+      The link preview needs JavaScript. You can still
+      <a href="/chrome-extension/" class="font-semibold text-brand-700 hover:underline">
+        install TokGrid
+      </a>
+      and download from the video page.
+    </p>
+  </noscript>
+</div>
+
+<script>
+  import { parseTikTokVideoUrl } from '../lib/tiktok-url.mjs';
+  import { fetchTikTokPreview } from '../lib/tiktok-oembed.mjs';
+
+  const REASON_COPY: Record<string, string> = {
+    empty: 'Paste a TikTok video link first.',
+    'too-long': 'That link is too long to preview.',
+    'invalid-url': 'That does not look like a web link. Paste a full TikTok video URL.',
+    'not-tiktok': 'That link is not on tiktok.com. Paste a TikTok video URL.',
+    'not-video':
+      'That link is not a single video. For a profile or hashtag, install TokGrid and batch-download the loaded cards.',
+    http: 'TikTok could not preview that link. It may be private, removed, or region-limited.',
+    timeout:
+      'The preview timed out. You can still install TokGrid and download from the video page.',
+    network:
+      'The preview is unavailable right now. You can still install TokGrid and download from the video page.',
+    invalid: 'TikTok returned an unexpected preview.',
+  };
+
+  function track(name: string, params: Record<string, string | number>) {
+    const gtag = (window as unknown as { gtag?: (...args: unknown[]) => void }).gtag;
+    if (typeof gtag === 'function') gtag('event', name, params);
+  }
+
+  function setupPreview() {
+    const form = document.getElementById('tiktok-preview-form');
+    const input = document.getElementById('tiktok-preview-url');
+    const status = document.getElementById('tiktok-preview-status');
+    const errorBox = document.getElementById('tiktok-preview-error');
+    const errorText = document.getElementById('tiktok-preview-error-text');
+    const resultBox = document.getElementById('tiktok-preview-result');
+    const frame = document.getElementById('tiktok-preview-player');
+    const heading = document.getElementById('tiktok-preview-heading');
+
+    if (!(form instanceof HTMLFormElement)) return;
+    if (!(input instanceof HTMLInputElement)) return;
+    if (!(status instanceof HTMLElement)) return;
+    if (!(errorBox instanceof HTMLElement)) return;
+    if (!(errorText instanceof HTMLElement)) return;
+    if (!(resultBox instanceof HTMLElement)) return;
+    if (!(frame instanceof HTMLIFrameElement)) return;
+    if (!(heading instanceof HTMLElement)) return;
+
+    const button = form.querySelector('button[type="submit"]');
+    if (!(button instanceof HTMLButtonElement)) return;
+
+    const idleLabel = button.textContent?.trim() || 'Preview';
+    let controller: AbortController | null = null;
+    let requestId = 0;
+
+    function setStatus(message: string) {
+      status.textContent = message;
+    }
+
+    function hideError() {
+      errorBox.hidden = true;
+      input.setAttribute('aria-invalid', 'false');
+    }
+
+    function hideResult() {
+      resultBox.hidden = true;
+      frame.hidden = true;
+      frame.src = 'about:blank';
+    }
+
+    function showError(message: string) {
+      hideResult();
+      errorText.textContent = message;
+      errorBox.hidden = false;
+      input.setAttribute('aria-invalid', 'true');
+      setStatus(message);
+    }
+
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      hideError();
+
+      const parsed = parseTikTokVideoUrl(input.value);
+      if (!parsed.ok) {
+        showError(REASON_COPY[parsed.reason] ?? REASON_COPY['invalid-url']);
+        input.focus();
+        track('preview_error', { reason: parsed.reason });
+        return;
+      }
+
+      controller?.abort();
+      controller = new AbortController();
+      const currentRequest = ++requestId;
+
+      button.disabled = true;
+      button.textContent = 'Checking…';
+      setStatus('Loading a preview from TikTok.');
+      track('preview_submit', { kind: parsed.kind });
+
+      try {
+        const response = await fetchTikTokPreview(parsed.canonicalUrl, {
+          signal: controller.signal,
+        });
+
+        if (currentRequest !== requestId) return;
+
+        if (!response.ok) {
+          showError(REASON_COPY[response.reason] ?? REASON_COPY['network']);
+          track('preview_error', { reason: response.reason });
+          return;
+        }
+
+        frame.src = response.preview.playerUrl;
+        frame.hidden = false;
+        resultBox.hidden = false;
+        input.setAttribute('aria-invalid', 'false');
+        setStatus('Preview ready.');
+        heading.focus();
+        track('preview_success', { kind: parsed.kind });
+      } finally {
+        if (currentRequest === requestId) {
+          button.disabled = false;
+          button.textContent = idleLabel;
+        }
+      }
+    });
+
+    input.addEventListener('input', () => {
+      if (!errorBox.hidden) hideError();
+    });
+  }
+
+  setupPreview();
+</script>

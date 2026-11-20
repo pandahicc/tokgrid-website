@@ -1,12 +1,12 @@
 ---
-title: How to Bulk Download TikTok Videos
-description: How TokGrid Pro batch downloads selected public videos to a folder, with progress, failure handling, and optional original-language SRT sidecars.
+title: How to Bulk Download TikTok Videos (Chrome Extension)
+description: "The step-by-step TokGrid Pro batch workflow: select the videos, choose a folder, monitor the queue, handle failures, and add optional SRT sidecars."
 pubDate: 2026-11-08
-updatedDate: 2026-11-08
+updatedDate: 2026-11-20
 readingTime: 7
 category: Downloads
 featureHref: /features/bulk-download/
-featureLabel: TikTok Video and Subtitle Downloads
+featureLabel: TikTok Video Downloader
 related:
   - how-to-export-tiktok-video-data-to-csv
   - how-to-analyze-tiktok-video-performance
@@ -21,24 +21,11 @@ takeaways:
 import ScreenshotSlot from '../../components/ScreenshotSlot.astro';
 import Callout from '../../components/Callout.astro';
 
-Bulk downloading is a workflow problem as much as a download problem. Selecting the right files, choosing a destination, handling failures, and knowing what to do when a URL expires all matter. TokGrid’s Pro batch download is built to keep those steps visible.
-
-This guide covers the free and Pro boundaries, the Chrome requirement, the folder workflow, the optional subtitle sidecar, and the rights issue that no download tool can solve for you.
+This is the step-by-step batch download workflow. For what the feature does, the free/Pro boundary, and the available formats, see the [TikTok Video Downloader page](/features/bulk-download/). This guide only covers the work: selection, folder, queue, failures, and rights.
 
 <Callout tone="note" title="Quick answer">
 On Pro, select the videos, choose batch download, pick a destination folder, and monitor the queue. The queue writes files as it goes, reports per-item failures, and supports cancellation. Enable the original-language SRT option if you want subtitle sidecars.
 </Callout>
-
-## Free versus Pro
-
-The download boundary is simple:
-
-- **Free:** single video download and single subtitle download.
-- **Pro:** batch download, selected-video CSV/JSON export, and product data export.
-
-Single video download lets you choose from the available qualities. Single subtitle download supports original and translated tracks in VTT or SRT when the page exposes them. Batch download adds the multi-file workflow.
-
-Pro is a paid upgrade. Current plan details are available in the extension, not on this page.
 
 ## What you need
 
@@ -46,6 +33,7 @@ Pro is a paid upgrade. Current plan details are available in the extension, not 
 - The TokGrid extension installed and enabled.
 - A supported public TikTok page with a loaded video list.
 - An active Pro subscription for batch download.
+- Videos with a playable source; a subtitle track is needed only if you want SRT sidecars.
 - A destination folder you choose through the browser permission prompt.
 
 The extension does not request the `downloads` permission. Single-file downloads use a local Blob and a download link. Batch download uses the File System Access API to write into the folder you select. The browser permission prompt is the authorization step for that folder.
@@ -87,18 +75,6 @@ The queue uses three-way concurrency and streaming writes. Streaming matters for
 A failed item does not stop the rest of the queue. Retry the failed items after refreshing the page if a URL has expired.
 
 <ScreenshotSlot id="batch" />
-
-## Quality selection
-
-TokGrid selects the highest available resolution by default and, when resolutions tie, the highest bitrate. The available qualities depend on what the page exposes. Some videos have only one quality, some have several, and some have no playable address at all.
-
-If a video has no playable address, it is not a download candidate. The data list can exclude records that cannot be played. Do not interpret an excluded record as a successful download.
-
-## Subtitle availability
-
-Single subtitle download supports VTT and SRT. When available, you can save original and translated tracks. If the primary subtitle URL fails, TokGrid can try a backup source exposed by the page.
-
-Not every video has subtitles. A video can be playable and still have no subtitle track. The extension cannot create subtitles that do not exist, and it does not transcribe audio.
 
 ## Common failures
 
@@ -142,4 +118,4 @@ It downloads the selected, available media to a folder you choose.
 
 ## Where to go next
 
-For the export workflow that shares the same selection, read [How to Export TikTok Video Data to CSV](/guides/how-to-export-tiktok-video-data-to-csv/). For the performance context behind the selection, read [How to Analyze TikTok Video Performance](/guides/how-to-analyze-tiktok-video-performance/). The [TikTok Video and Subtitle Downloads feature page](/features/bulk-download/) lists the free/Pro boundary and the available formats.
+For the export workflow that shares the same selection, read [TikTok Data Export: Video Data to CSV or JSON](/guides/how-to-export-tiktok-video-data-to-csv/). For the performance context behind the selection, read [TikTok Video Analytics: How to Read a Page Sample](/guides/how-to-analyze-tiktok-video-performance/). For the feature details and the free/Pro boundary, see the [TikTok Video Downloader page](/features/bulk-download/).

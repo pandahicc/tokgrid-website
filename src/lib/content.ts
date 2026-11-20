@@ -1,4 +1,5 @@
 import { getCollection, type CollectionEntry } from 'astro:content';
+import { FEATURE_GUIDES } from '../data/site';
 
 export type Guide = CollectionEntry<'guides'>;
 
@@ -84,4 +85,23 @@ export function getGuidesForFeature(
   limit = 2,
 ): Guide[] {
   return all.filter((guide) => guide.data.featureHref === featureHref).slice(0, limit);
+}
+
+/**
+ * Feature pages use a curated list so every guide is reachable from its related
+ * feature page. Falls back to the frontmatter `featureHref` when no list exists.
+ */
+export function getGuidesForFeaturePage(featureHref: string, all: Guide[]): Guide[] {
+  const slugs = FEATURE_GUIDES[featureHref];
+  if (!slugs) return getGuidesForFeature(featureHref, all, 3);
+
+  const bySlug = new Map(all.map((guide) => [guide.id, guide]));
+  const picked: Guide[] = [];
+
+  for (const slug of slugs) {
+    const guide = bySlug.get(slug);
+    if (guide && !picked.some((item) => item.id === guide.id)) picked.push(guide);
+  }
+
+  return picked.length > 0 ? picked : getGuidesForFeature(featureHref, all, 3);
 }

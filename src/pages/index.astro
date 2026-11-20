@@ -7,6 +7,7 @@ import Icon from '../components/Icon.astro';
 import InstallButton from '../components/InstallButton.astro';
 import ScreenshotSlot from '../components/ScreenshotSlot.astro';
 import SectionHeading from '../components/SectionHeading.astro';
+import StoreProof from '../components/StoreProof.astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { getPublishedGuides } from '../lib/content';
 import { HOME_FAQS } from '../data/faqs';
@@ -82,44 +83,53 @@ const comparison = [
             class="mb-5 inline-flex items-center gap-2 rounded-full border border-brand-200 bg-white px-3.5 py-1.5 text-xs font-bold uppercase tracking-[0.14em] text-brand-700 shadow-sm"
           >
             <span class="h-1.5 w-1.5 rounded-full bg-signal-500"></span>
-            Social Media Data Intelligence
+            Chrome extension for public TikTok pages
           </p>
           <h1
             class="max-w-2xl text-4xl font-bold leading-[1.08] tracking-tight text-slate-950 sm:text-5xl lg:text-6xl"
           >
-            Turn TikTok Content Into Actionable Insights.
+            Turn the TikTok page you have open into a data list.
           </h1>
           <p class="mt-6 max-w-xl text-lg leading-8 text-slate-600">
-            Analyze video performance, research competitors, explore products, and
-            organize public page data — all in your browser.
+            TokGrid reads the public page your browser has already loaded and turns the
+            videos and products into a filterable list: sample analytics, video and
+            subtitle downloads, and CSV/JSON export.
           </p>
           <p class="mt-4 max-w-xl text-sm font-medium text-slate-500">
-            Research smarter. Understand content. Discover opportunities.
+            No account, no upload, no background crawler.
           </p>
           <div class="mt-8 flex flex-col items-start gap-4 sm:flex-row sm:items-center">
             <InstallButton campaign="homepage-hero" size="lg" label="Add to Chrome — Free" showNote />
             <a
-              href="/guides/"
+              href="/chrome-extension/"
               class="inline-flex items-center gap-1.5 text-sm font-semibold text-slate-700 hover:text-brand-700"
             >
-              Browse the guides
+              How the extension works
               <Icon name="arrow" class="h-4 w-4" />
             </a>
           </div>
-          <ul class="mt-8 flex flex-wrap gap-x-5 gap-y-2 text-xs font-medium text-slate-500">
+          <p class="mt-3 text-xs leading-5 text-slate-500">
+            Desktop Chrome 111+ only. Not available on mobile.
+          </p>
+          <ul class="mt-6 flex flex-wrap gap-x-5 gap-y-2 text-xs font-medium text-slate-500">
             <li class="inline-flex items-center gap-1.5">
               <Icon name="check" class="h-3.5 w-3.5 text-brand-600" />
               No account for core use
             </li>
             <li class="inline-flex items-center gap-1.5">
               <Icon name="check" class="h-3.5 w-3.5 text-brand-600" />
-              Local-first processing
+              Local processing
+            </li>
+            <li class="inline-flex items-center gap-1.5">
+              <Icon name="check" class="h-3.5 w-3.5 text-brand-600" />
+              No telemetry
             </li>
             <li class="inline-flex items-center gap-1.5">
               <Icon name="check" class="h-3.5 w-3.5 text-brand-600" />
               Public pages only
             </li>
           </ul>
+          <StoreProof />
         </div>
 
         <div class="relative">
@@ -130,9 +140,9 @@ const comparison = [
           </div>
           <div class="relative rounded-3xl border border-slate-200 bg-white p-2 shadow-xl">
             <ScreenshotSlot
-              id="preview-sort-filters"
+              id="overlay"
               priority
-              caption="The Video preview uses the same filters and sort as the main list."
+              caption="The TokGrid panel and overlay on a public TikTok page — the same sample the extension reads."
             />
           </div>
         </div>
@@ -166,7 +176,7 @@ const comparison = [
           description="The page overlay gives you quick context. The panel gives you the list, the sample analytics, and the product anchors in one place."
         />
         <div class="grid gap-5 sm:grid-cols-2">
-          <ScreenshotSlot id="overlay" />
+          <ScreenshotSlot id="preview-sort-filters" />
           <ScreenshotSlot id="scatter" />
         </div>
       </div>

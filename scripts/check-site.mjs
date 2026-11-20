@@ -142,6 +142,12 @@ for (const file of htmlFiles) {
     ) {
       continue;
     }
+    // The only first-party client script is the link preview bundled by Astro.
+    // It must stay a module served from the hashed /_astro/ directory; third-party
+    // scripts and hand-written inline scripts are still rejected.
+    if (/type=["']module["']/i.test(attrs) && /src=["']\/_astro\//i.test(attrs)) {
+      continue;
+    }
     errors.push(`${page}: unexpected client script`);
   }
 
@@ -227,8 +233,8 @@ if (!existsSync(sitemapPath)) {
   const sitemap = await readFile(sitemapPath, 'utf8');
   const locs = [...sitemap.matchAll(/<loc>(.*?)<\/loc>/g)].map((match) => match[1]);
   sitemapCount = locs.length;
-  if (locs.length !== 20) {
-    errors.push(`sitemap has ${locs.length} URLs; expected 20`);
+  if (locs.length !== 21) {
+    errors.push(`sitemap has ${locs.length} URLs; expected 21`);
   }
   for (const loc of locs) {
     if (!loc.startsWith(BASE)) {
